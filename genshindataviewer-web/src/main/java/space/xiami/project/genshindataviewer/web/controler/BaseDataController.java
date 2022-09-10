@@ -10,9 +10,10 @@ import space.xiami.project.genshindataviewer.web.domain.ResultVO;
 import space.xiami.project.genshindataviewer.client.service.BaseDataService;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/base")
+@RequestMapping("/baseData")
 public class BaseDataController {
 
     public static final Logger log = LoggerFactory.getLogger(BaseDataController.class);
@@ -20,14 +21,24 @@ public class BaseDataController {
     @Resource
     private BaseDataService baseDataService;
 
-    @RequestMapping("/text")
+    @RequestMapping("/getText")
     @ResponseBody
-    public ResultVO<String> text(Byte lang, Long id){
+    public ResultVO getText(Byte lang, Long id){
         ResultDO<String> result = baseDataService.getTextByLangId(lang, id);
-        log.info("request with lang={}, id={}", lang, id);
         if(result.isSuccess()){
             return ResultVO.buildSuccessResult(result.getResult());
         }
         return ResultVO.buildErrorResult(result.getMsg());
     }
+
+    @RequestMapping("/allEnum")
+    @ResponseBody
+    public ResultVO allEnum(){
+        ResultDO<Map<String, Map<Byte, String>>> result = baseDataService.getValueDescOfAllEnums();
+        if(result.isSuccess()){
+            return ResultVO.buildSuccessResult(result.getResult());
+        }
+        return ResultVO.buildErrorResult(result.getMsg());
+    }
+
 }
