@@ -2,20 +2,24 @@ package space.xiami.project.genshindataviewer.client.service;
 
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.client.util.EnumUtils;
-import space.xiami.project.genshindataviewer.client.util.TextMapUtil;
+import space.xiami.project.genshindataviewer.client.factory.TextMapFactory;
 import space.xiami.project.genshindataviewer.domain.ResultDO;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 @Component
 public class BaseDataService {
 
+    @Resource
+    private TextMapFactory textMapFactory;
+
     public ResultDO<String> getTextByLangId(Byte lang, Long id){
-        String err = TextMapUtil.errorMsg(lang, id);
+        String err = textMapFactory.checkError(lang, id);
         if(err != null){
             return ResultDO.buildErrorResult(err);
         }
-        return ResultDO.buildSuccessResult(TextMapUtil.getText(lang, id));
+        return ResultDO.buildSuccessResult(textMapFactory.getText(lang, id));
     }
 
     public ResultDO<Map<Byte, String>> getValueDescOfEnum(String name){

@@ -1,4 +1,4 @@
-package space.xiami.project.genshindataviewer.web.domain;
+package space.xiami.project.genshindataviewer.domain;
 
 public class ResultVO {
 

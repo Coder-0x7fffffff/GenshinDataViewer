@@ -1,4 +1,4 @@
 package space.xiami.project.genshindataviewer.client.manager;
 
-public class WeaponManager {
+public class EquipAffixManager {
 }

@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import space.xiami.project.genshindataviewer.domain.ResultDO;
-import space.xiami.project.genshindataviewer.web.domain.ResultVO;
+import space.xiami.project.genshindataviewer.domain.ResultVO;
 import space.xiami.project.genshindataviewer.client.service.BaseDataService;
 
 import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/baseData")
+@RequestMapping("/data")
 public class BaseDataController {
 
     public static final Logger log = LoggerFactory.getLogger(BaseDataController.class);
@@ -21,7 +21,7 @@ public class BaseDataController {
     @Resource
     private BaseDataService baseDataService;
 
-    @RequestMapping("/getText")
+    @RequestMapping("/text")
     @ResponseBody
     public ResultVO getText(Byte lang, Long id){
         ResultDO<String> result = baseDataService.getTextByLangId(lang, id);
