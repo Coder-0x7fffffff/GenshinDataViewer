@@ -3,7 +3,9 @@ package space.xiami.project.genshindataviewer.client.factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.client.util.PathUtil;
+import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 
 import javax.annotation.Resource;
@@ -42,8 +44,11 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     // weaponPromoteId -> promoteLevel -> DO
     private final Map<Long, Map<Integer, WeaponPromoteExcelConfigData>> weaponPromoteExcelConfigDataMap = new HashMap<>();
 
+    // Lang -> name -> Id
+    private final Map<Byte, Map<String, Long>> langNameId = new HashMap<>();
+
     @Resource
-    private EquipAffixFactory equipAffixFactory;
+    private TextMapFactory textMapFactory;
 
     @Override
     public Set<String> relatedFilePathSet() {
@@ -67,6 +72,15 @@ public class WeaponFactory extends AbstractFileBaseFactory {
                 List<WeaponExcelConfigData> array = readJsonArray(path, WeaponExcelConfigData.class);
                 for(WeaponExcelConfigData data : array){
                     weaponExcelConfigDataMap.put(data.getId(), data);
+                    for(LanguageEnum language : LanguageEnum.values()){
+                        String name = textMapFactory.getText(language.getCode(), data.getNameTextMapHash());
+                        if(StringUtils.hasLength(name)){
+                            langNameId.computeIfAbsent(language.getCode(), v -> new HashMap<>()).put(name, data.getId());
+                        }else{
+                            log.warn("Weapon id={} with nameHash={} has no string name of language={}", data.getId(), data.getNameTextMapHash(), language.getDesc());
+                            langNameId.computeIfAbsent(language.getCode(), v -> new HashMap<>()).put(String.valueOf(data.getNameTextMapHash()), data.getId());
+                        }
+                    }
                 }
             }else if(path.endsWith("/"+ weaponLevelExcelConfigDataFile)){
                 List<WeaponLevelExcelConfigData> array = readJsonArray(path, WeaponLevelExcelConfigData.class);
@@ -112,18 +126,31 @@ public class WeaponFactory extends AbstractFileBaseFactory {
         return weaponLevelExcelConfigDataMap.get(level);
     }
 
-
-    public Map<Integer ,WeaponPromoteExcelConfigData> getEquipAffixMap(Long weaponPromoteId){
+    public Map<Integer ,WeaponPromoteExcelConfigData> getPromoteMap(Long weaponPromoteId){
         if(!weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId)){
             return null;
         }
         return weaponPromoteExcelConfigDataMap.get(weaponPromoteId);
     }
 
-    public WeaponPromoteExcelConfigData getEquipAffix(Long weaponPromoteId, Integer promoteLevel){
+    public WeaponPromoteExcelConfigData getPromote(Long weaponPromoteId, Integer promoteLevel){
         if(!weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId) || !weaponPromoteExcelConfigDataMap.get(weaponPromoteId).containsKey(promoteLevel)){
             return null;
         }
         return weaponPromoteExcelConfigDataMap.get(weaponPromoteId).get(promoteLevel);
+    }
+
+    public Map<String, Long> getName2Ids(Byte language){
+        if(!langNameId.containsKey(language)){
+            return null;
+        }
+        return langNameId.get(language);
+    }
+
+    public Long getIdByName(Byte language, String name){
+        if(langNameId.containsKey(language) && langNameId.get(language).containsKey(name)){
+            return langNameId.get(language).get(name);
+        }
+        return null;
     }
 }

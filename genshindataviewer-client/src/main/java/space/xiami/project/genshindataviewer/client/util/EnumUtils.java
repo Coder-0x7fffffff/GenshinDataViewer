@@ -12,7 +12,7 @@ public class EnumUtils {
 
     private static final Logger log = LoggerFactory.getLogger(EnumUtils.class);
 
-    //Enum, Code, Desc
+    //Enum -> Code -> Desc
     public static Map<String, Map<Byte, String>> enumValueDesc = new HashMap<>();
 
     static {

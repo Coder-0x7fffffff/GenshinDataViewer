@@ -27,6 +27,7 @@ public class WeaponExcelConfigData {
     private String destroyRule;
     private List<Long> destroyReturnMaterial;
     private List<Integer> destroyReturnMaterialCount;
+    private Integer initialLockState;
 
     public Long getId() {
         return id;
@@ -218,6 +219,14 @@ public class WeaponExcelConfigData {
 
     public void setDestroyReturnMaterialCount(List<Integer> destroyReturnMaterialCount) {
         this.destroyReturnMaterialCount = destroyReturnMaterialCount;
+    }
+
+    public Integer getInitialLockState() {
+        return initialLockState;
+    }
+
+    public void setInitialLockState(Integer initialLockState) {
+        this.initialLockState = initialLockState;
     }
 
     public static class WeaponProp{
