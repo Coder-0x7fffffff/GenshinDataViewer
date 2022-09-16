@@ -14,7 +14,7 @@ public class WeaponExcelConfigData {
     private String weaponType;
     private Integer rankLevel;
     private Integer weaponBaseExp;
-    private List<Integer> skillAffix;
+    private List<Long> skillAffix;
     private List<WeaponProp> weaponProp;
     private String awakenTexture;
     private String awakenLightMapTexture;
@@ -117,11 +117,11 @@ public class WeaponExcelConfigData {
         this.weaponBaseExp = weaponBaseExp;
     }
 
-    public List<Integer> getSkillAffix() {
+    public List<Long> getSkillAffix() {
         return skillAffix;
     }
 
-    public void setSkillAffix(List<Integer> skillAffix) {
+    public void setSkillAffix(List<Long> skillAffix) {
         this.skillAffix = skillAffix;
     }
 

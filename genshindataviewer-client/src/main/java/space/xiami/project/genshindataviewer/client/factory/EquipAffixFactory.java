@@ -31,16 +31,28 @@ public class EquipAffixFactory extends AbstractFileBaseFactory {
     }
 
     @Override
-    protected void load(String path) {
+    public void load(String path) {
         try{
             if(path.endsWith("/"+ equipAffixExcelConfigDataFile)) {
                 List<EquipAffixExcelConfigData> array = readJsonArray(path, EquipAffixExcelConfigData.class);
                 for (EquipAffixExcelConfigData data : array) {
-                    equipAffixExcelConfigDataMap.computeIfAbsent(data.getId(), v -> new HashMap<>()).put(data.getAffixId(), data);
+                    Map<Long, EquipAffixExcelConfigData> innerMap = equipAffixExcelConfigDataMap.computeIfAbsent(data.getId(), v -> new HashMap<>());
+                    if(innerMap.containsKey(data.getAffixId())){
+                        log.warn("Ignore same affixId={}", data.getAffixId());
+                        continue;
+                    }
+                    innerMap.put(data.getAffixId(), data);
                 }
             }
         } catch (IOException e) {
-            log.info("load error", e);
+            log.error("load error", e);
+        }
+    }
+
+    @Override
+    protected void clear(String path) {
+        if(path.endsWith("/"+ equipAffixExcelConfigDataFile)) {
+            equipAffixExcelConfigDataMap.clear();
         }
     }
 

@@ -1,7 +1,6 @@
 # GenshinDataViewer
 
 # TODO
-* 完成Manager构建model的Weapon\EquipAffix对象
 * 解析角色数据
 * 解析圣遗物数据
 * 提供查询武器、角色、圣遗物数据服务

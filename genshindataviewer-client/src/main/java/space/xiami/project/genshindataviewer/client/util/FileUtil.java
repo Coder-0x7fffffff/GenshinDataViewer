@@ -3,6 +3,11 @@ package space.xiami.project.genshindataviewer.client.util;
 import java.io.*;
 
 public class FileUtil {
+
+    public static boolean isExists(String path){
+        return new File(path).exists();
+    }
+
     public static byte[] readFileOnce(String path) throws IOException {
         File file = new File(path);
         FileInputStream fis = new FileInputStream(file);

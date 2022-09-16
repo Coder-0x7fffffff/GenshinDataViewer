@@ -1,27 +1,21 @@
 package space.xiami.project.genshindataviewer.client.factory;
 
 import com.alibaba.fastjson.JSON;
-import org.springframework.beans.factory.InitializingBean;
 import space.xiami.project.genshindataviewer.client.util.FileUtil;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.List;
 
-public abstract class AbstractFileBaseFactory implements InitializingBean, FileBaseFactory {
+public abstract class AbstractFileBaseFactory implements FileBaseFactory {
 
     protected abstract void load(String path);
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Set<String> paths = relatedFilePathSet();
-        for(String path : paths){
-            load(path);
-        }
-    }
+    protected abstract void clear(String path);
 
     @Override
     public void reload(String path){
         if(relatedFilePathSet().contains(path)){
+            clear(path);
             load(path);
         }
     }

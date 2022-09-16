@@ -2,36 +2,39 @@ package space.xiami.project.genshindataviewer.web.scheduled;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.client.factory.TextMapFactory;
+import space.xiami.project.genshindataviewer.client.factory.AbstractFileBaseFactory;
+import space.xiami.project.genshindataviewer.client.util.FileUtil;
+import space.xiami.project.genshindataviewer.web.util.SpringContextUtil;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component
-public class ResourceScheduled implements InitializingBean {
+public class ResourceScheduled {
 
     Logger log = LoggerFactory.getLogger(ResourceScheduled.class);
 
-    @Resource
-    private TextMapFactory textMapManager;
-
-    @Scheduled(cron = "${resource.schedule.cron}")
-    public void doTask() {
+    @Scheduled(cron = "${schedule.resource.refresh.cron}")
+    public void refreshResource() {
         log.info("ResourceScheduled task time: "+System.currentTimeMillis());
-        //TODO 通过OSS定时获取最新数据
-        List<String> reloadFiles = new ArrayList<>();
-        //刷新资源数据
-        for(String path : reloadFiles){
-            textMapManager.reload(path);
-        }
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        doTask();
+        ApplicationContext applicationContext = SpringContextUtil.getApplicationContext();
+        Map<String, AbstractFileBaseFactory> factories = applicationContext.getBeansOfType(AbstractFileBaseFactory.class);
+        factories.forEach((name, factory) ->{
+            Set<String> relatedFilePath = factory.relatedFilePathSet();
+            log.info("{} related file: {}", name, relatedFilePath);
+            relatedFilePath.forEach(path -> {
+                if(!FileUtil.isExists(path)){
+                    log.info("{} related {} not exists", name, path);
+                    //TODO load file from oss or github?
+                }
+                if(FileUtil.isExists(path)){
+                    log.info("{} loaded {}", name, path);
+                    factory.reload(path);
+                }
+            });
+        });
     }
 }

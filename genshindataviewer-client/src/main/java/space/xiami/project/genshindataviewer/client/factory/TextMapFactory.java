@@ -24,9 +24,6 @@ public class TextMapFactory extends AbstractFileBaseFactory {
 
     private static final String filePathPrefix = "TextMap";
     private static final String filePathSuffix = ".json";
-
-    // Language, TextMap
-    private static final Map<Byte, TextMap> language2TextMap = new HashMap<>();
     private static final Set<String> relatedFilePath = new HashSet<>();
     private static final Map<String, Byte> path2lang = new HashMap<>();
 
@@ -38,6 +35,9 @@ public class TextMapFactory extends AbstractFileBaseFactory {
             path2lang.put(filePath, languageEnum.getCode());
         }
     }
+
+    // Language, TextMap
+    private static final Map<Byte, TextMap> language2TextMap = new HashMap<>();
 
     @Override
     public Set<String> relatedFilePathSet() {
@@ -58,11 +58,17 @@ public class TextMapFactory extends AbstractFileBaseFactory {
             }
             JSONObject jsonObject = JSON.parseObject(os.toByteArray());
             for(Map.Entry<String, Object> entry : jsonObject.entrySet()){
+                Long id = Long.parseLong(entry.getKey());
+                if(hashTextMap.containsKey(id)){
+                    log.warn("Ignore same textMap id={}", id);
+                    continue;
+                }
                 if(!(entry.getValue() instanceof String)){
                     log.warn("TextMap value is not pojo string, value="+JSON.toJSONString(entry.getValue()));
                     continue;
                 }
-                hashTextMap.put(Long.parseLong(entry.getKey()), (String) entry.getValue());
+                String text = (String) entry.getValue();
+                hashTextMap.put(id, text);
             }
         } catch (FileNotFoundException e) {
             log.error("File not found", e);
@@ -74,7 +80,19 @@ public class TextMapFactory extends AbstractFileBaseFactory {
         textMap.setLanguage(language);
         textMap.setFilePath(path);
         textMap.setHashTextMap(hashTextMap);
+        if(language2TextMap.containsKey(language)){
+            log.warn("Already exists lang textMap, lang: {}", language);
+            return;
+        }
         language2TextMap.put(language, textMap);
+    }
+
+    @Override
+    protected void clear(String path) {
+        Byte language = path2lang.get(path);
+        if(language != null){
+            language2TextMap.remove(language);
+        }
     }
 
     public String checkError(Byte language, Long hash){

@@ -5,12 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import space.xiami.project.genshindataviewer.client.manager.EquipAffixManager;
-import space.xiami.project.genshindataviewer.client.manager.WeaponManager;
-import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
+import space.xiami.project.genshindataviewer.client.service.BaseDataService;
 import space.xiami.project.genshindataviewer.domain.ResultDO;
 import space.xiami.project.genshindataviewer.domain.ResultVO;
-import space.xiami.project.genshindataviewer.client.service.BaseDataService;
+import space.xiami.project.genshindataviewer.web.scheduled.ResourceScheduled;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -23,6 +21,9 @@ public class BaseDataController {
 
     @Resource
     private BaseDataService baseDataService;
+
+    @Resource
+    private ResourceScheduled resourceScheduled;
 
     @RequestMapping("/text")
     @ResponseBody
@@ -44,4 +45,18 @@ public class BaseDataController {
         return ResultVO.buildErrorResult(result.getMsg());
     }
 
+    @RequestMapping("refresh")
+    @ResponseBody
+    public ResultVO refresh(){
+        String error = null;
+        try{
+            resourceScheduled.refreshResource();
+        }catch (Exception e){
+            error = e.getMessage();
+        }
+        if(error == null){
+            return ResultVO.buildSuccessResult("强制刷新数据成功");
+        }
+        return ResultVO.buildErrorResult(error);
+    }
 }

@@ -7,12 +7,12 @@ import java.util.List;
 public class EquipAffix {
 
     private Long id; // 技能id
-    private Integer rankLevel; //技能等级
+    private Integer affixLevel; //等阶 武器的时候代表精炼等级(refinementRank - 1) 圣遗物代表套装效果(0/1)
     private String name; // nameTextMapHash 通过 TextMap 映射
     private String desc; // descTextMapHash 通过 TextMap 映射
-    private String openConfig; // 技能效果实现
-    private List<AddProp> addProps; // ...
-    private List<Double> paramList; // ...
+    private String openConfig; // TODO 解析
+    private List<AddProperty> addProps; // 属性加成
+    private List<Double> paramList; // 效果数值
 
     public Long getId() {
         return id;
@@ -22,12 +22,12 @@ public class EquipAffix {
         this.id = id;
     }
 
-    public Integer getRankLevel() {
-        return rankLevel;
+    public Integer getAffixLevel() {
+        return affixLevel;
     }
 
-    public void setRankLevel(Integer rankLevel) {
-        this.rankLevel = rankLevel;
+    public void setAffixLevel(Integer affixLevel) {
+        this.affixLevel = affixLevel;
     }
 
     public String getName() {
@@ -54,11 +54,11 @@ public class EquipAffix {
         this.openConfig = openConfig;
     }
 
-    public List<AddProp> getAddProps() {
+    public List<AddProperty> getAddProps() {
         return addProps;
     }
 
-    public void setAddProps(List<AddProp> addProps) {
+    public void setAddProps(List<AddProperty> addProps) {
         this.addProps = addProps;
     }
 
@@ -68,5 +68,26 @@ public class EquipAffix {
 
     public void setParamList(List<Double> paramList) {
         this.paramList = paramList;
+    }
+
+    public static class AddProperty{
+        private String propType;
+        private Double value;
+
+        public String getPropType() {
+            return propType;
+        }
+
+        public void setPropType(String propType) {
+            this.propType = propType;
+        }
+
+        public Double getValue() {
+            return value;
+        }
+
+        public void setValue(Double value) {
+            this.value = value;
+        }
     }
 }
