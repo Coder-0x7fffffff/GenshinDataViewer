@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import space.xiami.project.genshindataviewer.client.service.WeaponService;
+import space.xiami.project.genshindataviewer.client.WeaponService;
 import space.xiami.project.genshindataviewer.domain.ResultDO;
 import space.xiami.project.genshindataviewer.domain.ResultVO;
 import space.xiami.project.genshindataviewer.domain.model.Weapon;

@@ -1,12 +1,12 @@
-package space.xiami.project.genshindataviewer.client.manager;
+package space.xiami.project.genshindataviewer.service.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.client.factory.ManualTextMapFactory;
-import space.xiami.project.genshindataviewer.client.factory.MaterialFactory;
-import space.xiami.project.genshindataviewer.client.factory.TextMapFactory;
-import space.xiami.project.genshindataviewer.client.factory.WeaponFactory;
+import space.xiami.project.genshindataviewer.service.factory.ManualTextMapFactory;
+import space.xiami.project.genshindataviewer.service.factory.MaterialFactory;
+import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
+import space.xiami.project.genshindataviewer.service.factory.WeaponFactory;
 import space.xiami.project.genshindataviewer.domain.json.AddProp;
 import space.xiami.project.genshindataviewer.domain.json.WeaponCurveExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.json.WeaponExcelConfigData;

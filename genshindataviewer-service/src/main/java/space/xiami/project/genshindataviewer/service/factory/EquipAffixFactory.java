@@ -1,9 +1,9 @@
-package space.xiami.project.genshindataviewer.client.factory;
+package space.xiami.project.genshindataviewer.service.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.client.util.PathUtil;
+import space.xiami.project.genshindataviewer.service.util.PathUtil;
 import space.xiami.project.genshindataviewer.domain.json.EquipAffixExcelConfigData;
 
 import java.io.IOException;

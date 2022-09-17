@@ -1,4 +1,4 @@
-package space.xiami.project.genshindataviewer.client.util;
+package space.xiami.project.genshindataviewer.service.util;
 
 import java.io.File;
 import java.util.ArrayList;

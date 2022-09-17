@@ -1,7 +1,7 @@
-package space.xiami.project.genshindataviewer.client.factory;
+package space.xiami.project.genshindataviewer.service.factory;
 
 import com.alibaba.fastjson.JSON;
-import space.xiami.project.genshindataviewer.client.util.FileUtil;
+import space.xiami.project.genshindataviewer.service.util.FileUtil;
 
 import java.io.IOException;
 import java.util.List;

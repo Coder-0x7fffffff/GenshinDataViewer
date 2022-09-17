@@ -1,4 +1,4 @@
-package space.xiami.project.genshindataviewer.client.util;
+package space.xiami.project.genshindataviewer.service.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

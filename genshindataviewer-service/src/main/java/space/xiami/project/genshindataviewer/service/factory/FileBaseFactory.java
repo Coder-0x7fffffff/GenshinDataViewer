@@ -1,4 +1,4 @@
-package space.xiami.project.genshindataviewer.client.factory;
+package space.xiami.project.genshindataviewer.service.factory;
 
 import java.util.Set;
 

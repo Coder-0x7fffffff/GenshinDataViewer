@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import space.xiami.project.genshindataviewer.client.service.BaseDataService;
+import space.xiami.project.genshindataviewer.client.BaseDataService;
 import space.xiami.project.genshindataviewer.domain.ResultDO;
 import space.xiami.project.genshindataviewer.domain.ResultVO;
 import space.xiami.project.genshindataviewer.web.scheduled.ResourceScheduled;
