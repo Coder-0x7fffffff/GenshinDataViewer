@@ -7,6 +7,7 @@ import java.util.List;
 public class EquipAffixExcelConfigData {
     private Long affixId;
     private Long id;
+    private Integer level;
     private Long nameTextMapHash;
     private Long descTextMapHash;
     private String openConfig;
@@ -27,6 +28,14 @@ public class EquipAffixExcelConfigData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     public Long getNameTextMapHash() {

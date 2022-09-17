@@ -15,15 +15,18 @@ public class WeaponExcelConfigData {
     private Integer rankLevel;
     private Integer weaponBaseExp;
     private List<Long> skillAffix;
+    private Long awakenMaterial;
     private List<WeaponProp> weaponProp;
     private String awakenTexture;
     private String awakenLightMapTexture;
     private String awakenIcon;
+    private Boolean unRotate;
     private Long weaponPromoteId;
     private Long storyId;
     private List<Integer> awakenCosts;
     private Long GFCNPCMMGHC;
     private Long gachaCardNameHashPre;
+    private Integer enhanceRule;
     private String destroyRule;
     private List<Long> destroyReturnMaterial;
     private List<Integer> destroyReturnMaterialCount;
@@ -125,6 +128,14 @@ public class WeaponExcelConfigData {
         this.skillAffix = skillAffix;
     }
 
+    public Long getAwakenMaterial() {
+        return awakenMaterial;
+    }
+
+    public void setAwakenMaterial(Long awakenMaterial) {
+        this.awakenMaterial = awakenMaterial;
+    }
+
     public List<WeaponProp> getWeaponProp() {
         return weaponProp;
     }
@@ -155,6 +166,14 @@ public class WeaponExcelConfigData {
 
     public void setAwakenIcon(String awakenIcon) {
         this.awakenIcon = awakenIcon;
+    }
+
+    public Boolean getUnRotate() {
+        return unRotate;
+    }
+
+    public void setUnRotate(Boolean unRotate) {
+        this.unRotate = unRotate;
     }
 
     public Long getWeaponPromoteId() {
@@ -195,6 +214,14 @@ public class WeaponExcelConfigData {
 
     public void setGachaCardNameHashPre(Long gachaCardNameHashPre) {
         this.gachaCardNameHashPre = gachaCardNameHashPre;
+    }
+
+    public Integer getEnhanceRule() {
+        return enhanceRule;
+    }
+
+    public void setEnhanceRule(Integer enhanceRule) {
+        this.enhanceRule = enhanceRule;
     }
 
     public String getDestroyRule() {

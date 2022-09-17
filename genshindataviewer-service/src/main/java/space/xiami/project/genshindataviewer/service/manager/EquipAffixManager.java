@@ -40,19 +40,20 @@ public class EquipAffixManager {
         return ret;
     }
 
-    public EquipAffix getByIdAffixLevel(Long id, Integer affixLevel){
-        return getByIdAffixLevel(id, affixLevel, (byte) 0);
+    public EquipAffix getByIdLevel(Long id, Integer level){
+        return getByIdLevel(id, level, (byte) 0);
     }
 
-    public EquipAffix getByIdAffixLevel(Long id, Integer affixLevel, Byte language){
-        EquipAffixExcelConfigData oriRet = equipAffixFactory.getByIdAffixId(id, affixLevel2affixId(id, affixLevel));
+    public EquipAffix getByIdLevel(Long id, Integer level, Byte language){
+        EquipAffixExcelConfigData oriRet = equipAffixFactory.getByIdAffixId(id, level2affixId(id, level));
         return oriRet == null ? null : convert(oriRet, language);
     }
 
     private EquipAffix convert(EquipAffixExcelConfigData data, Byte language){
         EquipAffix result = new EquipAffix();
+        result.setAffixId(data.getAffixId());
         result.setId(data.getId());
-        result.setAffixLevel(affixId2affixLevel(data.getAffixId()));
+        result.setLevel(data.getLevel());
         result.setName(textMapFactory.getText(language, data.getNameTextMapHash()));
         result.setDesc(textMapFactory.getText(language, data.getDescTextMapHash()));
         result.setOpenConfig(data.getOpenConfig());
@@ -67,11 +68,11 @@ public class EquipAffixManager {
         return result;
     }
 
-    private Integer affixId2affixLevel(Long affixId){
+    private Integer affixId2Level(Long affixId){
         return affixId == null ? null : ((int) (affixId % 10));
     }
 
-    private Long affixLevel2affixId(Long id, Integer affixLevel){
-        return (id == null || affixLevel == null) ? null : (id * 10 + affixLevel);
+    private Long level2affixId(Long id, Integer level){
+        return (id == null || level == null) ? null : (id * 10 + level);
     }
 }

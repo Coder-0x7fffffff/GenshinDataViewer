@@ -24,6 +24,7 @@ public class AvatarExcelConfigData {
     private Double chargeEfficiency;
     private Long combatConfigHashSuffix;
     private Long combatConfigHashPre;
+    private Boolean isRangeAttack;
     private Long initialWeapon;
     private String weaponType;
     private Long manekinPathHashSuffix;
@@ -33,6 +34,8 @@ public class AvatarExcelConfigData {
     private Long gachaCardNameHashPre;
     private Long BKGDNBDMFAE;
     private Long HFGEFBCKAKN;
+    private Long LELMHLKPIOL;
+    private Long gachaImageNameHashPre;
     private String cutsceneShow;
     private Long skillDepotId;
     private Double staminaRecoverSpeed;
@@ -47,6 +50,8 @@ public class AvatarExcelConfigData {
     private List<Long> avatarPromoteRewardIdList;
     private Long featureTagGroupID;
     private Long infoDescTextMapHash;
+    private Long gachaImageNameHashSuffix;
+    private Long coopPicNameHashPre;
     private Double hpBase;
     private Double attackBase;
     private Double defenseBase;
@@ -226,6 +231,14 @@ public class AvatarExcelConfigData {
         this.combatConfigHashPre = combatConfigHashPre;
     }
 
+    public Boolean getRangeAttack() {
+        return isRangeAttack;
+    }
+
+    public void setRangeAttack(Boolean rangeAttack) {
+        isRangeAttack = rangeAttack;
+    }
+
     public Long getInitialWeapon() {
         return initialWeapon;
     }
@@ -296,6 +309,22 @@ public class AvatarExcelConfigData {
 
     public void setHFGEFBCKAKN(Long HFGEFBCKAKN) {
         this.HFGEFBCKAKN = HFGEFBCKAKN;
+    }
+
+    public Long getLELMHLKPIOL() {
+        return LELMHLKPIOL;
+    }
+
+    public void setLELMHLKPIOL(Long LELMHLKPIOL) {
+        this.LELMHLKPIOL = LELMHLKPIOL;
+    }
+
+    public Long getGachaImageNameHashPre() {
+        return gachaImageNameHashPre;
+    }
+
+    public void setGachaImageNameHashPre(Long gachaImageNameHashPre) {
+        this.gachaImageNameHashPre = gachaImageNameHashPre;
     }
 
     public String getCutsceneShow() {
@@ -408,6 +437,22 @@ public class AvatarExcelConfigData {
 
     public void setInfoDescTextMapHash(Long infoDescTextMapHash) {
         this.infoDescTextMapHash = infoDescTextMapHash;
+    }
+
+    public Long getGachaImageNameHashSuffix() {
+        return gachaImageNameHashSuffix;
+    }
+
+    public void setGachaImageNameHashSuffix(Long gachaImageNameHashSuffix) {
+        this.gachaImageNameHashSuffix = gachaImageNameHashSuffix;
+    }
+
+    public Long getCoopPicNameHashPre() {
+        return coopPicNameHashPre;
+    }
+
+    public void setCoopPicNameHashPre(Long coopPicNameHashPre) {
+        this.coopPicNameHashPre = coopPicNameHashPre;
     }
 
     public Double getHpBase() {

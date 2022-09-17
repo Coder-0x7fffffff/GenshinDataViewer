@@ -78,7 +78,7 @@ public class WeaponManager {
         // 获取精炼后的属性数据
         for(Long id : skillAffix){
             for(int refinementRank = 1; refinementRank <= maxRefinementRank; refinementRank++){
-                EquipAffix equipAffix = equipAffixManager.getByIdAffixLevel(id, refinementRank - 1, lang);
+                EquipAffix equipAffix = equipAffixManager.getByIdLevel(id, refinementRank - 1, lang);
                 // 排除为空的效果
                 if(equipAffix == null){
                     continue;
