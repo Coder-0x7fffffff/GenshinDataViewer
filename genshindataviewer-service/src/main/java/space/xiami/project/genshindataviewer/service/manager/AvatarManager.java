@@ -38,7 +38,8 @@ public class AvatarManager {
     }
     
     public Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData){
-        //TODO convert
-        return new Avatar();
+        Avatar avatar = new Avatar();
+        avatar.setId(excelConfigData.getId());
+        return avatar;
     }
 }
