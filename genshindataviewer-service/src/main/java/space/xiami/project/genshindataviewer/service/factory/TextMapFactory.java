@@ -19,9 +19,6 @@ public class TextMapFactory extends AbstractFileBaseFactory {
 
     private static final Logger log = LoggerFactory.getLogger(TextMapFactory.class);
 
-    public static final String ERROR_NO_SUCH_LANG = "NO_SUCH_LANG";
-    public static final String ERROR_NO_SUCH_ID = "NO_SUCH_ID";
-
     private static final String filePathPrefix = "TextMap";
     private static final String filePathSuffix = ".json";
     private static final Set<String> relatedFilePath = new HashSet<>();
@@ -93,13 +90,6 @@ public class TextMapFactory extends AbstractFileBaseFactory {
         if(language != null){
             language2TextMap.remove(language);
         }
-    }
-
-    public String checkError(Byte language, Long hash){
-        if(language2TextMap.containsKey(language)){
-            return language2TextMap.get(language).getText(hash) == null ? ERROR_NO_SUCH_ID : null;
-        }
-        return ERROR_NO_SUCH_LANG;
     }
 
     public String getText(Byte language, Long hash){

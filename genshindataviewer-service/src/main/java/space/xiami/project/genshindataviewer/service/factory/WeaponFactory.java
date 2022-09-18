@@ -2,10 +2,10 @@ package space.xiami.project.genshindataviewer.service.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.service.util.PathUtil;
-import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 
 import javax.annotation.Resource;
@@ -53,8 +53,8 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     // weaponPromoteId -> level -> isPromote > DO
     private final Map<Long, Map<Integer, Map<Boolean, WeaponPromoteExcelConfigData>>> weaponPromoteExcelConfigDataMapLevel = new HashMap<>();
 
-    // Lang -> name -> Id
-    private final Map<Byte, Map<String, Long>> langNameId = new HashMap<>();
+    // nameTextHash -> Id
+    private final Map<Long, Long> nameTextMapHash2Id = new HashMap<>();
 
     @Resource
     private TextMapFactory textMapFactory;
@@ -103,15 +103,11 @@ public class WeaponFactory extends AbstractFileBaseFactory {
                         continue;
                     }
                     weaponExcelConfigDataMap.put(data.getId(), data);
-                    for(LanguageEnum language : LanguageEnum.values()){
-                        String name = textMapFactory.getText(language.getCode(), data.getNameTextMapHash());
-                        if(StringUtils.hasLength(name)){
-                            langNameId.computeIfAbsent(language.getCode(), v -> new HashMap<>()).put(name, data.getId());
-                        }else{
-                            log.warn("Weapon id={} with nameHash={} has no string name of language={}", data.getId(), data.getNameTextMapHash(), language.getDesc());
-                            langNameId.computeIfAbsent(language.getCode(), v -> new HashMap<>()).put(String.valueOf(data.getNameTextMapHash()), data.getId());
-                        }
+                    if(nameTextMapHash2Id.containsKey(data.getNameTextMapHash())){
+                        log.warn("Ignore same nameTextMapHash hash={}", data.getNameTextMapHash());
+                        continue;
                     }
+                    nameTextMapHash2Id.put(data.getNameTextMapHash(), data.getId());
                 }
             }else if(path.endsWith("/"+ weaponLevelExcelConfigDataFile)){
                 List<WeaponLevelExcelConfigData> array = readJsonArray(path, WeaponLevelExcelConfigData.class);
@@ -171,7 +167,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
             weaponCurveInfoMap.clear();
         }else if(path.endsWith("/"+ weaponExcelConfigDataFile)){
             weaponExcelConfigDataMap.clear();
-            langNameId.clear();
+            nameTextMapHash2Id.clear();
         }else if(path.endsWith("/"+ weaponLevelExcelConfigDataFile)){
             weaponLevelExcelConfigDataMap.clear();
         }else if(path.endsWith("/"+ weaponPromoteExcelConfigDataFile)){
@@ -244,17 +240,22 @@ public class WeaponFactory extends AbstractFileBaseFactory {
         return null;
     }
 
+    @Cacheable(cacheNames = "WeaponFactory_name2Ids", unless = "#result.size() == 0")
     public Map<String, Long> getName2Ids(Byte language){
-        if(!langNameId.containsKey(language)){
-            return null;
-        }
-        return langNameId.get(language);
+        Map<String, Long> name2Ids = new HashMap<>();
+        nameTextMapHash2Id.forEach((hash, id) -> {
+            String name = textMapFactory.getText(language, hash);
+            if(StringUtils.hasLength(name)){
+                name2Ids.put(name, id);
+            }else{
+                name2Ids.put(String.valueOf(id), id);
+            }
+        });
+        return name2Ids;
     }
 
     public Long getIdByName(Byte language, String name){
-        if(langNameId.containsKey(language) && langNameId.get(language).containsKey(name)){
-            return langNameId.get(language).get(name);
-        }
-        return null;
+        Map<String, Long> name2ids = getName2Ids(language);
+        return name2ids.get(name);
     }
 }

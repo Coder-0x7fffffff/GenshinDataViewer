@@ -2,8 +2,11 @@ package space.xiami.project.genshindataviewer.service.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.domain.json.AvatarExcelConfigData;
+import space.xiami.project.genshindataviewer.domain.json.WeaponExcelConfigData;
 import space.xiami.project.genshindataviewer.service.util.PathUtil;
 
 import javax.annotation.Resource;
@@ -23,7 +26,11 @@ public class AvatarFactory extends AbstractFileBaseFactory{
         relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + avatarExcelConfigDataFile);
     }
 
+    // id -> DO
     private final Map<Long, AvatarExcelConfigData> avatarExcelConfigDataMap = new HashMap<>();
+
+    // nameTextHash -> Id
+    private final Map<Long, Long> nameTextMapHash2Id = new HashMap<>();
 
     @Resource
     private TextMapFactory textMapFactory;
@@ -44,6 +51,11 @@ public class AvatarFactory extends AbstractFileBaseFactory{
                         continue;
                     }
                     avatarExcelConfigDataMap.put(data.getId(), data);
+                    if(nameTextMapHash2Id.containsKey(data.getNameTextMapHash())){
+                        log.warn("Ignore same nameTextMapHash hash={}", data.getNameTextMapHash());
+                        continue;
+                    }
+                    nameTextMapHash2Id.put(data.getNameTextMapHash(), data.getId());
                 }
             }
         } catch (IOException e) {
@@ -55,6 +67,34 @@ public class AvatarFactory extends AbstractFileBaseFactory{
     protected void clear(String path) {
         if(path.endsWith("/"+ avatarExcelConfigDataFile)) {
             avatarExcelConfigDataMap.clear();
+            nameTextMapHash2Id.clear();
         }
+    }
+
+
+    public AvatarExcelConfigData getAvatar(Long id){
+        if(!avatarExcelConfigDataMap.containsKey(id)){
+            return null;
+        }
+        return avatarExcelConfigDataMap.get(id);
+    }
+
+    @Cacheable(cacheNames = "AvatarFactory_name2Ids", unless = "#result.size() == 0")
+    public Map<String, Long> getName2Ids(Byte language){
+        Map<String, Long> name2Ids = new HashMap<>();
+        nameTextMapHash2Id.forEach((hash, id) -> {
+            String name = textMapFactory.getText(language, hash);
+            if(StringUtils.hasLength(name)){
+                name2Ids.put(name, id);
+            }else{
+                name2Ids.put(String.valueOf(id), id);
+            }
+        });
+        return name2Ids;
+    }
+
+    public Long getIdByName(Byte language, String name){
+        Map<String, Long> name2ids = getName2Ids(language);
+        return name2ids.get(name);
     }
 }

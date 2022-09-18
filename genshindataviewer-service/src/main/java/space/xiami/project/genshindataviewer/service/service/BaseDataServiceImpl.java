@@ -1,6 +1,7 @@
 package space.xiami.project.genshindataviewer.service.service;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.client.BaseDataService;
 import space.xiami.project.genshindataviewer.service.util.EnumUtils;
 import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
@@ -17,11 +18,11 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     @Override
     public ResultDO<String> getTextByLangId(Byte lang, Long id){
-        String err = textMapFactory.checkError(lang, id);
-        if(err != null){
-            return ResultDO.buildErrorResult(err);
+        String text = textMapFactory.getText(lang, id);
+        if(text == null){ // never use StringUtils::hasLength, for text no length which is not null
+            return ResultDO.buildErrorResult("获取失败");
         }
-        return ResultDO.buildSuccessResult(textMapFactory.getText(lang, id));
+        return ResultDO.buildSuccessResult(text);
     }
 
     @Override
