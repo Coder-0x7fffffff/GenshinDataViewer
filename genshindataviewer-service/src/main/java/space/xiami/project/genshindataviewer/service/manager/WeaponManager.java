@@ -126,29 +126,36 @@ public class WeaponManager {
             String propType = weaponProp.getPropType();
             Double initValue = weaponProp.getInitValue();
             String type = weaponProp.getType();
+            if(propType == null || initValue == null){
+                return;
+            }
             // 构建不同等级属性数据
             String propTypeText = manualTextMapFactory.getText(lang, propType);
             levels.forEach(level -> {
                 // 获取武器等级提升
                 WeaponCurveExcelConfigData.CurveInfo curveInfo = weaponFactory.getWeaponCurveInfo(level, type);
                 // 获取武器进阶提升
-                weaponFactory.getWeaponPromoteByLevel(excelConfigData.getWeaponPromoteId(), level).forEach((isPromote, promoteExcelConfigData) -> {
+                Map<Boolean, WeaponPromoteExcelConfigData> promoteByLevel = weaponFactory.getWeaponPromoteByLevel(excelConfigData.getWeaponPromoteId(), level);
+                if(promoteByLevel == null){
+                    return;
+                }
+                promoteByLevel.forEach((isPromote, promoteExcelConfigData) -> {
                     List<AddProp> addPropList = promoteExcelConfigData.getAddProps();
                     double promoteValue = 0.0;
-                    for(AddProp addProp : addPropList){
-                        if(addProp.getPropType().equals(propType)){
-                            promoteValue = addProp.getValue() == null?0:addProp.getValue();
+                    for (AddProp addProp : addPropList) {
+                        if (addProp.getPropType().equals(propType)) {
+                            promoteValue = addProp.getValue() == null ? 0 : addProp.getValue();
                             break;
                         }
                     }
                     // 计算属性值
                     double value = calculateCurveInfo(initValue, curveInfo, promoteValue);
-                    String levelStr = level +(isPromote?"+":"");
+                    String levelStr = level + (isPromote ? "+" : "");
                     // 构建属性数据
                     Weapon.WeaponProperty.Property property = new Weapon.WeaponProperty.Property();
                     property.setPropType(propTypeText);
                     property.setValue(value);
-                    levelStr2PropertyMap.computeIfAbsent(levelStr, v->new ArrayList<>()).add(property);
+                    levelStr2PropertyMap.computeIfAbsent(levelStr, v -> new ArrayList<>()).add(property);
                 });
             });
         });

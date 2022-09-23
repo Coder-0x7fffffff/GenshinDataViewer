@@ -13,6 +13,9 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class AvatarFactory extends AbstractFileBaseFactory{
     
@@ -26,10 +29,14 @@ public class AvatarFactory extends AbstractFileBaseFactory{
         relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + avatarExcelConfigDataFile);
     }
 
-    // id -> DO
+    /**
+     * id -> DO
+     */
     private final Map<Long, AvatarExcelConfigData> avatarExcelConfigDataMap = new HashMap<>();
 
-    // nameTextHash -> Id
+    /**
+     * nameTextHash -> Id
+     */
     private final Map<Long, Long> nameTextMapHash2Id = new HashMap<>();
 
     @Resource
@@ -49,6 +56,9 @@ public class AvatarFactory extends AbstractFileBaseFactory{
                     if(avatarExcelConfigDataMap.containsKey(data.getId())){
                         log.warn("Ignore same id={}", data.getId());
                         continue;
+                    }
+                    if(!data.getDescTextMapHash().equals(data.getInfoDescTextMapHash())){
+                        log.warn("Different desc and info id={}", data.getId());
                     }
                     avatarExcelConfigDataMap.put(data.getId(), data);
                     if(nameTextMapHash2Id.containsKey(data.getNameTextMapHash())){
