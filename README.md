@@ -1,7 +1,6 @@
 # GenshinDataViewer
 
 # TODO
-* 解析角色数据 / 等待完成字段转换convert
 * 解析圣遗物数据
 * 提供查询圣遗物数据服务
 * 前后端分离的管理后台
