@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public class PathUtil {
 
     private static final String resourceDirectory = "resources/";
@@ -12,9 +15,14 @@ public class PathUtil {
 
     public static final String textMap = "TextMap/";
     public static final String excelBinOutput = "ExcelBinOutput/";
+    public static final String readable = "Readable/";
 
     public static String getExcelBinOutputDirectory(){
         return resourceDirectory + dataDirectory + excelBinOutput;
+    }
+
+    public static String getReadableDirectory(){
+        return resourceDirectory + dataDirectory + readable;
     }
 
     public static String getTextMapDirectory(){

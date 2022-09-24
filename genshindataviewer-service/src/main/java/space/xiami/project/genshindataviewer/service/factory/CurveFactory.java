@@ -14,9 +14,9 @@ import java.util.*;
  * @author Xiami
  */
 @Component
-public class CurveManager extends AbstractFileBaseFactory{
+public class CurveFactory extends AbstractFileBaseFactory{
 
-    public static final Logger log = LoggerFactory.getLogger(CurveManager.class);
+    public static final Logger log = LoggerFactory.getLogger(CurveFactory.class);
 
     public static final String weaponCurveExcelConfigDataFile = "WeaponCurveExcelConfigData.json";
     public static final String avatarCurveExcelConfigDataFile = "AvatarCurveExcelConfigData.json";

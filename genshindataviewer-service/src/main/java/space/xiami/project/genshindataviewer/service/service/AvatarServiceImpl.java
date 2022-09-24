@@ -9,6 +9,9 @@ import space.xiami.project.genshindataviewer.service.manager.AvatarManager;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class AvatarServiceImpl implements AvatarService {
 

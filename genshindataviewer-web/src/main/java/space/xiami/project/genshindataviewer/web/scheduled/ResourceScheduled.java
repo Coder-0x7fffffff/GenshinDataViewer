@@ -12,6 +12,9 @@ import space.xiami.project.genshindataviewer.web.util.SpringContextUtil;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class ResourceScheduled {
 

@@ -13,6 +13,9 @@ import space.xiami.project.genshindataviewer.web.scheduled.ResourceScheduled;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 @RestController
 @RequestMapping("/data")
 public class BaseDataController {

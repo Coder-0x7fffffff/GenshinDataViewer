@@ -2,6 +2,9 @@ package space.xiami.project.genshindataviewer.domain.model;
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public class Weapon {
     // 映射数据
     /**
@@ -47,6 +50,7 @@ public class Weapon {
     /**
      * 武器故事 TODO storyId映射到DocumentExcelConfigData 再通过contentLocallizedId映射到LocalizationExcelCOnfigData ......
      */
+    private String story;
     // story; GFCNPCMMGHC; gachaCardNameHashPre; destroyRule; destroyReturnMaterial; destroyReturnMaterialCount; initialLockState; awakenTexture; awakenLightMapTexture; awakenIcon; weight; rank; gadgetId; icon;
 
     public Long getId() {
@@ -127,6 +131,14 @@ public class Weapon {
 
     public void setWeaponPromoteCosts(List<WeaponPromoteCost> weaponPromoteCosts) {
         this.weaponPromoteCosts = weaponPromoteCosts;
+    }
+
+    public String getStory() {
+        return story;
+    }
+
+    public void setStory(String story) {
+        this.story = story;
     }
 
     public static class WeaponPromoteCost {

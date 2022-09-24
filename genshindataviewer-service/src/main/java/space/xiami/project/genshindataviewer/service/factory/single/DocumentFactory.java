@@ -1,4 +1,4 @@
-package space.xiami.project.genshindataviewer.service.factory;
+package space.xiami.project.genshindataviewer.service.factory.single;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import space.xiami.project.genshindataviewer.service.util.PathUtil;
  * @author Xiami
  */
 @Component
-public class DocumentFactory extends AbstractSingleFileFactory<DocumentExcelConfigData, Long>{
+public class DocumentFactory extends AbstractSingleFactory<DocumentExcelConfigData, Long> {
 
     public static final Logger log = LoggerFactory.getLogger(DocumentFactory.class);
 

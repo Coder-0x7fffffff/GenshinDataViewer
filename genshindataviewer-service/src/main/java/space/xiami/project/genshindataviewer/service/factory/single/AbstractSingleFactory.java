@@ -1,9 +1,10 @@
-package space.xiami.project.genshindataviewer.service.factory;
+package space.xiami.project.genshindataviewer.service.factory.single;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.service.util.PathUtil;
+import space.xiami.project.genshindataviewer.service.factory.AbstractFileBaseFactory;
+import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.*;
  * @author Xiami
  */
 @Component
-public abstract class AbstractSingleFileFactory<ExcelConfigData, GroupField> extends AbstractFileBaseFactory{
+public abstract class AbstractSingleFactory<ExcelConfigData, GroupField> extends AbstractFileBaseFactory {
 
     /**
      * 相关的文件路径
@@ -29,7 +30,7 @@ public abstract class AbstractSingleFileFactory<ExcelConfigData, GroupField> ext
      */
     public abstract GroupField getGroupValue(ExcelConfigData excelConfigData);
 
-    public static final Logger log = LoggerFactory.getLogger(AbstractSingleFileFactory.class);
+    public static final Logger log = LoggerFactory.getLogger(AbstractSingleFactory.class);
 
     private final Map<GroupField, ExcelConfigData> excelConfigDataMap = new HashMap<>();
 
@@ -44,7 +45,7 @@ public abstract class AbstractSingleFileFactory<ExcelConfigData, GroupField> ext
     @Override
     public void load(String path) {
         try{
-            List<ExcelConfigData> array = (List<ExcelConfigData>) readJsonArray(
+            List<ExcelConfigData> array = readJsonArray(
                     path,
                     (Class<ExcelConfigData>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]
             );

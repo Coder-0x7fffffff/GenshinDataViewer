@@ -4,6 +4,9 @@ import space.xiami.project.genshindataviewer.domain.ResultDO;
 
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public interface BaseDataService {
 
     ResultDO<String> getTextByLangId(Byte lang, Long id);

@@ -9,6 +9,9 @@ import space.xiami.project.genshindataviewer.domain.model.Weapon;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class WeaponServiceImpl implements WeaponService {
 

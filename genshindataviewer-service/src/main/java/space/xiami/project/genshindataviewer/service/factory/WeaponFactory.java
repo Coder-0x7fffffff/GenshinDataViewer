@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class WeaponFactory extends AbstractFileBaseFactory {
 

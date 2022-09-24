@@ -5,6 +5,9 @@ import space.xiami.project.genshindataviewer.domain.model.Avatar;
 
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public interface AvatarService {
 
     ResultDO<Map<String, Long>> getAvatarIds(Byte lang);

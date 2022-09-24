@@ -7,6 +7,9 @@ import space.xiami.project.genshindataviewer.web.scheduled.ResourceScheduled;
 
 import javax.annotation.Resource;
 
+/**
+ * @author Xiami
+ */
 @Service
 public class SpringContextRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
 

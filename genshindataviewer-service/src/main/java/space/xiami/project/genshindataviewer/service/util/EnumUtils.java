@@ -8,6 +8,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public class EnumUtils {
 
     private static final Logger log = LoggerFactory.getLogger(EnumUtils.class);

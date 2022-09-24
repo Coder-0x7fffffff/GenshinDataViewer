@@ -10,6 +10,9 @@ import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshindataviewer.service.factory.*;
+import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
+import space.xiami.project.genshindataviewer.service.factory.single.MaterialFactory;
+import space.xiami.project.genshindataviewer.service.factory.single.RewardFactory;
 import space.xiami.project.genshindataviewer.service.util.AvatarUtil;
 import space.xiami.project.genshindataviewer.service.util.CurveUtil;
 
@@ -45,7 +48,7 @@ public class AvatarManager {
     private WeaponManager weaponManager;
 
     @Resource
-    private CurveManager curveManager;
+    private CurveFactory curveFactory;
 
     public Map<String, Long> getAvatarIds(Byte language){
         return avatarFactory.getName2Ids(language);
@@ -120,7 +123,7 @@ public class AvatarManager {
                             break;
                         }
                     }
-                    CurveExcelConfigData.CurveInfo curveInfo = curveManager.getCurveInfo(CurveEnum.AVATAR.getCode(), level, growCurve);
+                    CurveExcelConfigData.CurveInfo curveInfo = curveFactory.getCurveInfo(CurveEnum.AVATAR.getCode(), level, growCurve);
                     // 突破提升的属性
                     double promoteValue = 0.0;
                     for (AddProp addProp : promoteExcelConfigData.getAddProps()) {
@@ -202,7 +205,7 @@ public class AvatarManager {
         List<Long> rewardIdList = excelConfigData.getAvatarPromoteRewardIdList();
         Map<Integer, RewardExcelConfigData> promoteLevel2Reward = new HashMap<>();
         for(int i=0; i<rewardIdList.size(); i++){
-            promoteLevel2Reward.put(rewardPromoteLevelList.get(i), rewardFactory.getReward(rewardIdList.get(i)));
+            promoteLevel2Reward.put(rewardPromoteLevelList.get(i), rewardFactory.get(rewardIdList.get(i)));
         }
         Map<Integer, AvatarPromoteExcelConfigData> promoteMap = avatarFactory.getAvatarPromoteMap(excelConfigData.getAvatarPromoteId());
         avatar.setAvatarPromote(promoteMap.values().stream().map(data -> {

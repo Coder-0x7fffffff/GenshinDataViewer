@@ -5,6 +5,9 @@ import space.xiami.project.genshindataviewer.domain.model.Weapon;
 
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public interface WeaponService {
 
     ResultDO<Map<String, Long>> getWeaponIds(Byte lang);

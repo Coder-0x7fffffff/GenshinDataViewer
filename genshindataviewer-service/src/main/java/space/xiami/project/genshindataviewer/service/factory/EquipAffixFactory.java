@@ -9,6 +9,9 @@ import space.xiami.project.genshindataviewer.domain.json.EquipAffixExcelConfigDa
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class EquipAffixFactory extends AbstractFileBaseFactory {
 
@@ -18,7 +21,9 @@ public class EquipAffixFactory extends AbstractFileBaseFactory {
 
     private static final Set<String> relatedFilePath = new HashSet<>();
 
-    // id -> affixId -> DO
+    /**
+     * id -> affixId -> DO
+     */
     private final Map<Long, Map<Long ,EquipAffixExcelConfigData>> equipAffixExcelConfigDataMap = new HashMap<>();
 
     static {

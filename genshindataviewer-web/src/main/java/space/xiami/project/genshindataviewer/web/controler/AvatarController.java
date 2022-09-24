@@ -12,6 +12,9 @@ import space.xiami.project.genshindataviewer.domain.model.Avatar;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 @RestController
 @RequestMapping("/avatar")
 public class AvatarController {

@@ -10,6 +10,9 @@ import space.xiami.project.genshindataviewer.domain.ResultDO;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class BaseDataServiceImpl implements BaseDataService {
 
@@ -19,7 +22,8 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Override
     public ResultDO<String> getTextByLangId(Byte lang, Long id){
         String text = textMapFactory.getText(lang, id);
-        if(text == null){ // never use StringUtils::hasLength, for text no length which is not null
+        if(text == null){
+            // never use StringUtils::hasLength, for text no length which is not null
             return ResultDO.buildErrorResult("获取失败");
         }
         return ResultDO.buildSuccessResult(text);

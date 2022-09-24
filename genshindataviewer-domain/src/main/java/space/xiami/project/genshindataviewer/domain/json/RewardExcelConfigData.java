@@ -7,6 +7,9 @@ import java.util.List;
  */
 public class RewardExcelConfigData {
     private Long rewardId;
+    private Integer hcoin;
+    private Integer scoin;
+    private Integer playerExp;
     private List<RewardItemData> rewardItemList;
 
     public Long getRewardId() {
@@ -15,6 +18,30 @@ public class RewardExcelConfigData {
 
     public void setRewardId(Long rewardId) {
         this.rewardId = rewardId;
+    }
+
+    public Integer getHcoin() {
+        return hcoin;
+    }
+
+    public void setHcoin(Integer hcoin) {
+        this.hcoin = hcoin;
+    }
+
+    public Integer getScoin() {
+        return scoin;
+    }
+
+    public void setScoin(Integer scoin) {
+        this.scoin = scoin;
+    }
+
+    public Integer getPlayerExp() {
+        return playerExp;
+    }
+
+    public void setPlayerExp(Integer playerExp) {
+        this.playerExp = playerExp;
     }
 
     public List<RewardItemData> getRewardItemList() {

@@ -4,12 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshindataviewer.service.factory.*;
-import space.xiami.project.genshindataviewer.domain.json.AddProp;
-import space.xiami.project.genshindataviewer.domain.json.CurveExcelConfigData;
-import space.xiami.project.genshindataviewer.domain.json.WeaponExcelConfigData;
-import space.xiami.project.genshindataviewer.domain.json.WeaponPromoteExcelConfigData;
+import space.xiami.project.genshindataviewer.service.factory.single.DocumentFactory;
+import space.xiami.project.genshindataviewer.service.factory.single.LocalizationFactory;
+import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
+import space.xiami.project.genshindataviewer.service.factory.single.MaterialFactory;
 import space.xiami.project.genshindataviewer.service.util.CurveUtil;
 
 import javax.annotation.Resource;
@@ -37,7 +38,13 @@ public class WeaponManager {
     private EquipAffixManager equipAffixManager;
 
     @Resource
-    private CurveManager curveManager;
+    private CurveFactory curveFactory;
+
+    @Resource
+    private DocumentFactory documentFactory;
+
+    @Resource
+    private LocalizationFactory localizationFactory;
 
     public Map<String, Long> getWeaponIds(Byte language){
         return weaponFactory.getName2Ids(language);
@@ -153,7 +160,7 @@ public class WeaponManager {
             String propTypeText = manualTextMapFactory.getText(lang, propType);
             levels.forEach(level -> {
                 // 获取武器等级提升
-                CurveExcelConfigData.CurveInfo curveInfo = curveManager.getCurveInfo(CurveEnum.WEAPON.getCode(), level, type);
+                CurveExcelConfigData.CurveInfo curveInfo = curveFactory.getCurveInfo(CurveEnum.WEAPON.getCode(), level, type);
                 // 获取武器进阶提升
                 Map<Boolean, WeaponPromoteExcelConfigData> promoteByLevel = weaponFactory.getWeaponPromoteByLevel(excelConfigData.getWeaponPromoteId(), level);
                 if(promoteByLevel == null){
@@ -197,7 +204,12 @@ public class WeaponManager {
             weaponProperties.add(weaponProperty);
         }
         weapon.setWeaponProperties(weaponProperties);
-        //TODO 结构化武器故事
+        // 武器故事
+        DocumentExcelConfigData document = documentFactory.get(excelConfigData.getStoryId());
+        if(document != null){
+            String story = localizationFactory.getText(lang, document.getContentLocalizedId());
+            weapon.setStory(story);
+        }
         return weapon;
     }
 }

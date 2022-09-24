@@ -3,7 +3,7 @@ package space.xiami.project.genshindataviewer.service.manager;
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.domain.model.AddProperty;
 import space.xiami.project.genshindataviewer.service.factory.EquipAffixFactory;
-import space.xiami.project.genshindataviewer.service.factory.ManualTextMapFactory;
+import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
 import space.xiami.project.genshindataviewer.domain.json.EquipAffixExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.model.EquipAffix;

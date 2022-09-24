@@ -2,6 +2,9 @@ package space.xiami.project.genshindataviewer.service.util;
 
 import java.io.*;
 
+/**
+ * @author Xiami
+ */
 public class FileUtil {
 
     public static boolean isExists(String path){
