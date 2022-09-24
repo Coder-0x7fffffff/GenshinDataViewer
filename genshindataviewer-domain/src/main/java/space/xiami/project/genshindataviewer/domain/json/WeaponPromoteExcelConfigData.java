@@ -9,7 +9,7 @@ public class WeaponPromoteExcelConfigData {
 
     private Long weaponPromoteId;
     private Integer promoteLevel;
-    private List<CostItem> costItems;
+    private List<CostItemData> costItems;
     private Integer coinCost;
     private List<AddProp> addProps;
     private Integer unlockMaxLevel;
@@ -31,12 +31,12 @@ public class WeaponPromoteExcelConfigData {
         this.promoteLevel = promoteLevel;
     }
 
-    public List<CostItem> getCostItems() {
+    public List<CostItemData> getCostItems() {
         return costItems;
     }
 
-    public void setCostItems(List<CostItem> costItems) {
-        this.costItems = costItems;
+    public void setCostItems(List<CostItemData> costItemData) {
+        this.costItems = costItemData;
     }
 
     public Integer getCoinCost() {

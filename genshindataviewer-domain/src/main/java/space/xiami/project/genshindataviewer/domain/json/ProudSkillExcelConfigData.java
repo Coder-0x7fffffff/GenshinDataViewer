@@ -15,11 +15,11 @@ public class ProudSkillExcelConfigData {
     private Long unlockDescTextMapHash;
     private String icon;
     private Integer coinCost;
-    private List<CostItem> costItems;
+    private List<CostItemData> costItems;
     private List<String> filterConds;
     private Integer breakLevel;
     private List<Long> paramDescList;
-    private List<String> lifeEffectType;
+    private String lifeEffectType;
     private List<String> lifeEffectParams;
     private Boolean EKCLMJKICCF;
     private Integer effectiveForTeam;
@@ -99,12 +99,12 @@ public class ProudSkillExcelConfigData {
         this.coinCost = coinCost;
     }
 
-    public List<CostItem> getCostItems() {
+    public List<CostItemData> getCostItems() {
         return costItems;
     }
 
-    public void setCostItems(List<CostItem> costItems) {
-        this.costItems = costItems;
+    public void setCostItems(List<CostItemData> costItemData) {
+        this.costItems = costItemData;
     }
 
     public List<String> getFilterConds() {
@@ -131,11 +131,11 @@ public class ProudSkillExcelConfigData {
         this.paramDescList = paramDescList;
     }
 
-    public List<String> getLifeEffectType() {
+    public String getLifeEffectType() {
         return lifeEffectType;
     }
 
-    public void setLifeEffectType(List<String> lifeEffectType) {
+    public void setLifeEffectType(String lifeEffectType) {
         this.lifeEffectType = lifeEffectType;
     }
 

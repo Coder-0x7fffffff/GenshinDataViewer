@@ -3,7 +3,7 @@ package space.xiami.project.genshindataviewer.domain.json;
 /**
  * @author Xiami
  */
-public class CostItem{
+public class CostItemData {
         private Long id;
         private Integer count;
 

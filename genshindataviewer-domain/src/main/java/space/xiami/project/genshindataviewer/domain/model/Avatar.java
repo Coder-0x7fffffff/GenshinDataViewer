@@ -1,9 +1,11 @@
 package space.xiami.project.genshindataviewer.domain.model;
 
-import space.xiami.project.genshindataviewer.domain.json.AvatarExcelConfigData;
-
 import java.util.List;
+import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public class Avatar {
 
     /**
@@ -64,7 +66,7 @@ public class Avatar {
     /**
      * 初始武器
      */
-    private Weapon initialWeapon;
+    private WeaponInfo initialWeapon;
 
     /**
      * 范围攻击
@@ -73,17 +75,23 @@ public class Avatar {
 
     /**
      * 技能
-     * TODO 解析
      * -skillDepotId-> AvatarSkillDepotExcelConfigData
      * -skill/energySkill-> AvatarSkillExcelConfigData
      * -proudSkillGroupId-> ProudSkillExcelConfigData
+     * @see space.xiami.project.genshindataviewer.domain.json.AvatarSkillDepotExcelConfigData
+     * @see space.xiami.project.genshindataviewer.domain.json.AvatarSkillExcelConfigData
+     * @see space.xiami.project.genshindataviewer.domain.json.ProudSkillExcelConfigData
      */
-    private Long skillDepotId;
+    private List<List<Skill>> skillDepots;
 
     /**
-     * TODO 分析
+     * 命座
+     * -skillDepotId-> AvatarSkillDepotExcelConfigData
+     * -talents-> AvatarTalentExcelConfigData
+     * @see space.xiami.project.genshindataviewer.domain.json.AvatarSkillDepotExcelConfigData
+     * @see space.xiami.project.genshindataviewer.domain.json.AvatarTalentExcelConfigData
      */
-    private List<Long> candSkillDepotIds;
+    private List<Talent> talents;
 
     /**
      * 体力回复速度
@@ -91,34 +99,9 @@ public class Avatar {
     private Double staminaRecoverSpeed;
 
     /**
-     * TODO 分析
+     * 武器突破
      */
-    private Long manekinMotionConfig;
-
-    /**
-     * TODO 分析 ? 是否需要
-     */
-    private String avatarIdentityType;
-
-    /**
-     * 角色突破ID TODO 解析 AvatarPromoteExcelConfigData.json
-     */
-    private Long avatarPromoteId;
-
-    /**
-     * 突破奖励对应的突破等级
-     */
-    private List<Integer> avatarPromoteRewardLevelList;
-
-    /**
-     * 对应的奖励RewardId TODO 解析 RewardExcelConfigData.json
-     */
-    private List<Long> avatarPromoteRewardIdList;
-
-    /**
-     * TODO 分析 ? 是否需要
-     */
-    private Long featureTagGroupID;
+    private List<AvatarPromote> avatarPromotes;
 
     public Long getId() {
         return id;
@@ -208,11 +191,11 @@ public class Avatar {
         this.avatarProperties = avatarProperties;
     }
 
-    public Weapon getInitialWeapon() {
+    public WeaponInfo getInitialWeapon() {
         return initialWeapon;
     }
 
-    public void setInitialWeapon(Weapon initialWeapon) {
+    public void setInitialWeapon(WeaponInfo initialWeapon) {
         this.initialWeapon = initialWeapon;
     }
 
@@ -224,20 +207,20 @@ public class Avatar {
         isRangeAttack = rangeAttack;
     }
 
-    public Long getSkillDepotId() {
-        return skillDepotId;
+    public List<List<Skill>> getSkillDepots() {
+        return skillDepots;
     }
 
-    public void setSkillDepotId(Long skillDepotId) {
-        this.skillDepotId = skillDepotId;
+    public void setSkillDepots(List<List<Skill>> skillDepots) {
+        this.skillDepots = skillDepots;
     }
 
-    public List<Long> getCandSkillDepotIds() {
-        return candSkillDepotIds;
+    public List<Talent> getTalents() {
+        return talents;
     }
 
-    public void setCandSkillDepotIds(List<Long> candSkillDepotIds) {
-        this.candSkillDepotIds = candSkillDepotIds;
+    public void setTalents(List<Talent> talents) {
+        this.talents = talents;
     }
 
     public Double getStaminaRecoverSpeed() {
@@ -248,51 +231,376 @@ public class Avatar {
         this.staminaRecoverSpeed = staminaRecoverSpeed;
     }
 
-    public Long getManekinMotionConfig() {
-        return manekinMotionConfig;
+    public List<AvatarPromote> getAvatarPromote() {
+        return avatarPromotes;
     }
 
-    public void setManekinMotionConfig(Long manekinMotionConfig) {
-        this.manekinMotionConfig = manekinMotionConfig;
+    public void setAvatarPromote(List<AvatarPromote> avatarPromotes) {
+        this.avatarPromotes = avatarPromotes;
     }
 
-    public String getAvatarIdentityType() {
-        return avatarIdentityType;
+    public static abstract  class Skill{
+
+        /**
+         * 技能名称
+         */
+        private String name;
+
+        /**
+         * 技能描述
+         */
+        private String desc;
+
+        /**
+         * 技能属性列
+         */
+        private List<SkillProperty> skillProperties;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public List<SkillProperty> getSkillProperties() {
+            return skillProperties;
+        }
+
+        public void setSkillProperties(List<SkillProperty> skillProperties) {
+            this.skillProperties = skillProperties;
+        }
+
+        public static class SkillProperty {
+            /**
+             * 技能等级
+             */
+            private Integer level;
+
+            /**
+             * 消耗
+             */
+            private Integer coinCost;
+
+            /**
+             * 消耗物品
+             */
+            private List<CostItem> costItems;
+
+            /**
+             * 从 paramDescList -> paramList 映射
+             */
+            private Map<String, String> paramDescValueMap;
+
+            /**
+             * 参数
+             */
+            private List<Double> params;
+
+            public Integer getLevel() {
+                return level;
+            }
+
+            public void setLevel(Integer level) {
+                this.level = level;
+            }
+
+            public Integer getCoinCost() {
+                return coinCost;
+            }
+
+            public void setCoinCost(Integer coinCost) {
+                this.coinCost = coinCost;
+            }
+
+            public List<CostItem> getCostItems() {
+                return costItems;
+            }
+
+            public void setCostItems(List<CostItem> costItems) {
+                this.costItems = costItems;
+            }
+
+            public Map<String, String> getParamDescValueMap() {
+                return paramDescValueMap;
+            }
+
+            public void setParamDescValueMap(Map<String, String> paramDescValueMap) {
+                this.paramDescValueMap = paramDescValueMap;
+            }
+
+            public List<Double> getParams() {
+                return params;
+            }
+
+            public void setParams(List<Double> params) {
+                this.params = params;
+            }
+        }
     }
 
-    public void setAvatarIdentityType(String avatarIdentityType) {
-        this.avatarIdentityType = avatarIdentityType;
+    public static class ActiveSkill extends Skill {
+
+        /**
+         * 技能id
+         */
+        private Long id;
+
+        /**
+         * 技能冷却
+         */
+        private Double cdTime;
+
+        /**
+         * 消耗的元素种类
+         */
+        private String costElemType;
+
+        /**
+         * 消耗元素量
+         */
+        private Double costElemVal;
+
+        /**
+         * 体力消耗
+         */
+        private Double costStamina;
+
+        /**
+         * 最大使用次数
+         */
+        private Integer maxChargeNum;
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public Double getCdTime() {
+            return cdTime;
+        }
+
+        public void setCdTime(Double cdTime) {
+            this.cdTime = cdTime;
+        }
+
+        public String getCostElemType() {
+            return costElemType;
+        }
+
+        public void setCostElemType(String costElemType) {
+            this.costElemType = costElemType;
+        }
+
+        public Double getCostElemVal() {
+            return costElemVal;
+        }
+
+        public void setCostElemVal(Double costElemVal) {
+            this.costElemVal = costElemVal;
+        }
+
+        public Double getCostStamina() {
+            return costStamina;
+        }
+
+        public void setCostStamina(Double costStamina) {
+            this.costStamina = costStamina;
+        }
+
+        public Integer getMaxChargeNum() {
+            return maxChargeNum;
+        }
+
+        public void setMaxChargeNum(Integer maxChargeNum) {
+            this.maxChargeNum = maxChargeNum;
+        }
     }
 
-    public Long getAvatarPromoteId() {
-        return avatarPromoteId;
+    public static class PassiveSkill extends Skill {
+        /**
+         * 需要的人物突破等级
+         */
+        private Integer needAvatarPromoteLevel;
+
+        public Integer getNeedAvatarPromoteLevel() {
+            return needAvatarPromoteLevel;
+        }
+
+        public void setNeedAvatarPromoteLevel(Integer needAvatarPromoteLevel) {
+            this.needAvatarPromoteLevel = needAvatarPromoteLevel;
+        }
     }
 
-    public void setAvatarPromoteId(Long avatarPromoteId) {
-        this.avatarPromoteId = avatarPromoteId;
+    public static class Talent{
+
+        /**
+         * 命座id
+         */
+        private Long talentId;
+
+        /**
+         * 前置命座
+         */
+        private Long prevTalentId;
+
+        /**
+         * 名称
+         */
+        private String name;
+
+        /**
+         * 描述
+         */
+        private String desc;
+
+        /**
+         * 提升消耗
+         */
+        private CostItem costItem;
+
+        /**
+         * 属性加成
+         */
+        private List<AddProperty> addProperties;
+
+        /**
+         * 参数
+         */
+        private List<Double> paramList;
+
+        public Long getTalentId() {
+            return talentId;
+        }
+
+        public void setTalentId(Long talentId) {
+            this.talentId = talentId;
+        }
+
+        public Long getPrevTalentId() {
+            return prevTalentId;
+        }
+
+        public void setPrevTalentId(Long prevTalentId) {
+            this.prevTalentId = prevTalentId;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public CostItem getCostItem() {
+            return costItem;
+        }
+
+        public void setCostItem(CostItem costItem) {
+            this.costItem = costItem;
+        }
+
+        public List<AddProperty> getAddProperties() {
+            return addProperties;
+        }
+
+        public void setAddProperties(List<AddProperty> addProperties) {
+            this.addProperties = addProperties;
+        }
+
+        public List<Double> getParamList() {
+            return paramList;
+        }
+
+        public void setParamList(List<Double> paramList) {
+            this.paramList = paramList;
+        }
     }
 
-    public List<Integer> getAvatarPromoteRewardLevelList() {
-        return avatarPromoteRewardLevelList;
-    }
+    public static class AvatarPromote {
+        private Long avatarPromoteId;
+        private Integer promoteLevel;
+        private List<CostItem> costItems;
+        private Integer scoinCost;
+        private Integer unlockMaxLevel;
+        private Integer requiredPlayerLevel;
+        private List<RewardItem> rewardItems;
 
-    public void setAvatarPromoteRewardLevelList(List<Integer> avatarPromoteRewardLevelList) {
-        this.avatarPromoteRewardLevelList = avatarPromoteRewardLevelList;
-    }
+        public Long getAvatarPromoteId() {
+            return avatarPromoteId;
+        }
 
-    public List<Long> getAvatarPromoteRewardIdList() {
-        return avatarPromoteRewardIdList;
-    }
+        public void setAvatarPromoteId(Long avatarPromoteId) {
+            this.avatarPromoteId = avatarPromoteId;
+        }
 
-    public void setAvatarPromoteRewardIdList(List<Long> avatarPromoteRewardIdList) {
-        this.avatarPromoteRewardIdList = avatarPromoteRewardIdList;
-    }
+        public Integer getPromoteLevel() {
+            return promoteLevel;
+        }
 
-    public Long getFeatureTagGroupID() {
-        return featureTagGroupID;
-    }
+        public void setPromoteLevel(Integer promoteLevel) {
+            this.promoteLevel = promoteLevel;
+        }
 
-    public void setFeatureTagGroupID(Long featureTagGroupID) {
-        this.featureTagGroupID = featureTagGroupID;
+        public List<CostItem> getCostItems() {
+            return costItems;
+        }
+
+        public void setCostItems(List<CostItem> costItems) {
+            this.costItems = costItems;
+        }
+
+        public Integer getScoinCost() {
+            return scoinCost;
+        }
+
+        public void setScoinCost(Integer scoinCost) {
+            this.scoinCost = scoinCost;
+        }
+
+        public Integer getUnlockMaxLevel() {
+            return unlockMaxLevel;
+        }
+
+        public void setUnlockMaxLevel(Integer unlockMaxLevel) {
+            this.unlockMaxLevel = unlockMaxLevel;
+        }
+
+        public Integer getRequiredPlayerLevel() {
+            return requiredPlayerLevel;
+        }
+
+        public void setRequiredPlayerLevel(Integer requiredPlayerLevel) {
+            this.requiredPlayerLevel = requiredPlayerLevel;
+        }
+
+        public List<RewardItem> getRewardItems() {
+            return rewardItems;
+        }
+
+        public void setRewardItems(List<RewardItem> rewardItems) {
+            this.rewardItems = rewardItems;
+        }
     }
 }

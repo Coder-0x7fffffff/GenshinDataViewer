@@ -107,7 +107,7 @@ public class TextMapFactory extends AbstractFileBaseFactory {
         }
         if(language2TextMap.containsKey(language)){
             String text = language2TextMap.get(language).getText(hash);
-            if(params != null){
+            if(text != null && params != null){
                 text = replaceParam(text, params);
             }
             return text;
@@ -123,8 +123,8 @@ public class TextMapFactory extends AbstractFileBaseFactory {
                 String paramText = paramMatcher.group(i);
                 Matcher matcher;
                 if((matcher = arrayParamPattern.matcher(paramText)).matches()){
-                    int index = Integer.parseInt(matcher.group(1));
-                    // TODO 解析 pat字符串 String pat = matcher.group(2);
+                    int index = Integer.parseInt(matcher.group(1)) - 1;
+                    // TODO 解析 pat字符串 String type = matcher.group(2);
                     if(params == null || index >= params.size()){
                         log.warn("Out bound param index, param={}, index={}", paramText, index);
                         continue;

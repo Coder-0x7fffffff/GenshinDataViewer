@@ -133,7 +133,7 @@ public class Weapon {
         private Long weaponPromoteId;
         private Integer promoteLevel;
         private Integer coinCost;
-        private List<WeaponCostItem> weaponCostItems;
+        private List<CostItem> costItems;
         private Integer unlockMaxLevel;
         private Integer requiredPlayerLevel;
 
@@ -161,12 +161,12 @@ public class Weapon {
             this.coinCost = coinCost;
         }
 
-        public List<WeaponCostItem> getWeaponCostItems() {
-            return weaponCostItems;
+        public List<CostItem> getCostItems() {
+            return costItems;
         }
 
-        public void setWeaponCostItems(List<WeaponCostItem> weaponCostItems) {
-            this.weaponCostItems = weaponCostItems;
+        public void setCostItems(List<CostItem> costItems) {
+            this.costItems = costItems;
         }
 
         public Integer getUnlockMaxLevel() {
@@ -183,36 +183,6 @@ public class Weapon {
 
         public void setRequiredPlayerLevel(Integer requiredPlayerLevel) {
             this.requiredPlayerLevel = requiredPlayerLevel;
-        }
-
-        public static class WeaponCostItem{
-            private Long id;
-            private String name;
-            private Integer count;
-
-            public Long getId() {
-                return id;
-            }
-
-            public void setId(Long id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public Integer getCount() {
-                return count;
-            }
-
-            public void setCount(Integer count) {
-                this.count = count;
-            }
         }
     }
 

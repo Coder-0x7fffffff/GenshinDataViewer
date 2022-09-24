@@ -10,7 +10,7 @@ public class AvatarPromoteExcelConfigData {
     private Long avatarPromoteId;
     private Integer promoteLevel;
     private String promoteAudio;
-    private List<CostItem> costItems;
+    private List<CostItemData> costItems;
     private Integer scoinCost;
     private List<AddProp> addProps;
     private Integer unlockMaxLevel;
@@ -40,12 +40,12 @@ public class AvatarPromoteExcelConfigData {
         this.promoteAudio = promoteAudio;
     }
 
-    public List<CostItem> getCostItems() {
+    public List<CostItemData> getCostItems() {
         return costItems;
     }
 
-    public void setCostItems(List<CostItem> costItems) {
-        this.costItems = costItems;
+    public void setCostItems(List<CostItemData> costItemData) {
+        this.costItems = costItemData;
     }
 
     public Integer getScoinCost() {

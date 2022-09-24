@@ -2,16 +2,50 @@ package space.xiami.project.genshindataviewer.domain.model;
 
 import java.util.List;
 
+/**
+ * @author Xiami
+ */
 public class EquipAffix {
 
-    private Long affixId; // 技能详细id
-    private Long id; // 技能id
-    private Integer level; //等阶 武器的时候代表精炼等级(refinementRank - 1) 圣遗物代表套装效果(0/1)
-    private String name; // nameTextMapHash 通过 TextMap 映射
-    private String desc; // descTextMapHash 通过 TextMap 映射
-    private String openConfig; // TODO 解析
-    private List<AddProperty> addProps; // 属性加成
-    private List<Double> paramList; // 效果数值
+    /**
+     * 技能详细id
+     */
+    private Long affixId;
+
+    /**
+     *  技能id
+     */
+    private Long id;
+
+    /**
+     * 等阶 武器的时候代表精炼等级(refinementRank - 1) 圣遗物代表套装效果(0/1)
+     */
+    private Integer level;
+
+    /**
+     * nameTextMapHash 通过 TextMap 映射
+     */
+    private String name;
+
+    /**
+     * descTextMapHash 通过 TextMap 映射
+     */
+    private String desc;
+
+    /**
+     *  TODO 解析
+     */
+    private String openConfig;
+
+    /**
+     * 属性加成
+     */
+    private List<AddProperty> addProperties;
+
+    /**
+     * 效果数值
+     */
+    private List<Double> paramList;
 
     public Long getAffixId() {
         return affixId;
@@ -61,12 +95,12 @@ public class EquipAffix {
         this.openConfig = openConfig;
     }
 
-    public List<AddProperty> getAddProps() {
-        return addProps;
+    public List<AddProperty> getAddProperties() {
+        return addProperties;
     }
 
-    public void setAddProps(List<AddProperty> addProps) {
-        this.addProps = addProps;
+    public void setAddProperties(List<AddProperty> addProperties) {
+        this.addProperties = addProperties;
     }
 
     public List<Double> getParamList() {
@@ -75,26 +109,5 @@ public class EquipAffix {
 
     public void setParamList(List<Double> paramList) {
         this.paramList = paramList;
-    }
-
-    public static class AddProperty{
-        private String propType;
-        private Double value;
-
-        public String getPropType() {
-            return propType;
-        }
-
-        public void setPropType(String propType) {
-            this.propType = propType;
-        }
-
-        public Double getValue() {
-            return value;
-        }
-
-        public void setValue(Double value) {
-            this.value = value;
-        }
     }
 }

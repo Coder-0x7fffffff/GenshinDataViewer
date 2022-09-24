@@ -1,18 +1,15 @@
 package space.xiami.project.genshindataviewer.service.manager;
 
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
-import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
+import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshindataviewer.service.factory.*;
 import space.xiami.project.genshindataviewer.domain.json.AddProp;
 import space.xiami.project.genshindataviewer.domain.json.CurveExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.json.WeaponExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.json.WeaponPromoteExcelConfigData;
-import space.xiami.project.genshindataviewer.domain.model.EquipAffix;
-import space.xiami.project.genshindataviewer.domain.model.Weapon;
 import space.xiami.project.genshindataviewer.service.util.CurveUtil;
 
 import javax.annotation.Resource;
@@ -65,6 +62,24 @@ public class WeaponManager {
         return convert(lang, excelConfigData);
     }
 
+    public WeaponInfo getWeaponInfo(Byte lang, Long id){
+        if(lang == null || id == null){
+            return null;
+        }
+        WeaponExcelConfigData excelConfigData = weaponFactory.getWeapon(id);
+        if(excelConfigData == null){
+            return null;
+        }
+        return convertInfo(lang, excelConfigData);
+    }
+
+    public WeaponInfo convertInfo(Byte lang, WeaponExcelConfigData excelConfigData){
+        WeaponInfo weaponInfo = new WeaponInfo();
+        weaponInfo.setId(excelConfigData.getId());
+        weaponInfo.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));
+        return weaponInfo;
+    }
+
     public Weapon convert(Byte lang, WeaponExcelConfigData excelConfigData){
         Weapon weapon = new Weapon();
         weapon.setId(excelConfigData.getId());
@@ -111,13 +126,14 @@ public class WeaponManager {
             cost.setWeaponPromoteId(data.getWeaponPromoteId());
             cost.setPromoteLevel(data.getPromoteLevel());
             cost.setCoinCost(data.getCoinCost());
-            cost.setWeaponCostItems(data.getCostItems().stream().filter(costItem -> costItem.getId() != null).map(costItem -> {
-                Weapon.WeaponPromoteCost.WeaponCostItem weaponCostItem = new Weapon.WeaponPromoteCost.WeaponCostItem();
+            List<CostItem> costItems = data.getCostItems().stream().filter(costItem -> costItem.getId() != null).map(costItem -> {
+                CostItem weaponCostItem = new CostItem();
                 weaponCostItem.setId(costItem.getId());
                 weaponCostItem.setName(materialFactory.getMaterialName(lang, costItem.getId()));
                 weaponCostItem.setCount(costItem.getCount());
                 return weaponCostItem;
-            }).collect(Collectors.toList()));
+            }).collect(Collectors.toList());
+            cost.setCostItems(costItems.size() > 0 ? costItems : null);
             cost.setUnlockMaxLevel(data.getUnlockMaxLevel());
             cost.setRequiredPlayerLevel(data.getRequiredPlayerLevel());
             return cost;

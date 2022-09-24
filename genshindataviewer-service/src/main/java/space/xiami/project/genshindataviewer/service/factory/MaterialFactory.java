@@ -10,6 +10,9 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class MaterialFactory extends AbstractFileBaseFactory{
 

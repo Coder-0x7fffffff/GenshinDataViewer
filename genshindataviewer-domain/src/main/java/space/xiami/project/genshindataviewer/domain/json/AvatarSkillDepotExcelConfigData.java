@@ -107,6 +107,7 @@ public class AvatarSkillDepotExcelConfigData {
     }
 
     public static class InherentProudSkillOpen{
+        //TODO 没有名称，只能通过proudSkill拿到名称，在只有一个等级之前是合理的
         private Long proudSkillGroupId;
         private Integer needAvatarPromoteLevel;
 

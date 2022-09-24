@@ -1,6 +1,7 @@
 package space.xiami.project.genshindataviewer.service.manager;
 
 import org.springframework.stereotype.Component;
+import space.xiami.project.genshindataviewer.domain.model.AddProperty;
 import space.xiami.project.genshindataviewer.service.factory.EquipAffixFactory;
 import space.xiami.project.genshindataviewer.service.factory.ManualTextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
@@ -58,8 +59,8 @@ public class EquipAffixManager {
         result.setDesc(textMapFactory.getText(language, data.getDescTextMapHash()));
         result.setOpenConfig(data.getOpenConfig());
         // 添加非空属性加成
-        result.setAddProps(data.getAddProps().stream().filter(addProp -> addProp.getPropType() != null).map(addProp -> {
-            EquipAffix.AddProperty addProperty = new EquipAffix.AddProperty();
+        result.setAddProperties(data.getAddProps().stream().filter(addProp -> addProp.getPropType() != null).map(addProp -> {
+            AddProperty addProperty = new AddProperty();
             addProperty.setPropType(manualTextMapFactory.getText(language, addProp.getPropType()));
             addProperty.setValue(addProp.getValue());
             return addProperty;

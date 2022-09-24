@@ -27,6 +27,7 @@ public class AvatarFactory extends AbstractFileBaseFactory{
     public static final String avatarSkillDepotExcelConfigDataFile = "AvatarSkillDepotExcelConfigData.json";
     public static final String avatarSkillExcelConfigDataFile = "AvatarSkillExcelConfigData.json";
     public static final String proudSkillExcelConfigDataFile = "ProudSkillExcelConfigData.json";
+    public static final String avatarTalentExcelConfigDataFile = "AvatarTalentExcelConfigData.json";
 
     private static final Set<String> relatedFilePath = new HashSet<>();
 
@@ -37,6 +38,7 @@ public class AvatarFactory extends AbstractFileBaseFactory{
         relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + avatarSkillDepotExcelConfigDataFile);
         relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + avatarSkillExcelConfigDataFile);
         relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + proudSkillExcelConfigDataFile);
+        relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + avatarTalentExcelConfigDataFile);
     }
 
     /**
@@ -72,6 +74,11 @@ public class AvatarFactory extends AbstractFileBaseFactory{
      * proudSkillGroupId -> level -> DO
      */
     private final Map<Long, Map<Integer, ProudSkillExcelConfigData>> proudSkillExcelConfigDataMapLevel = new HashMap<>();
+
+    /**
+     * talentId -> DO
+     */
+    private final Map<Long, AvatarTalentExcelConfigData> avatarTalentExcelConfigDataMap = new HashMap<>();
 
     /**
      * nameTextHash -> Id
@@ -179,6 +186,15 @@ public class AvatarFactory extends AbstractFileBaseFactory{
                     }
                     innerMap.put(level, data);
                 }
+            }else if(path.endsWith(SPLASH + avatarTalentExcelConfigDataFile)){
+                List<AvatarTalentExcelConfigData> array = readJsonArray(path, AvatarTalentExcelConfigData.class);
+                for(AvatarTalentExcelConfigData data : array){
+                    if(avatarTalentExcelConfigDataMap.containsKey(data.getTalentId())){
+                        log.warn("Ignore same AvatarTalentExcelConfigData talentId={}", data.getTalentId());
+                        continue;
+                    }
+                    avatarTalentExcelConfigDataMap.put(data.getTalentId(), data);
+                }
             }
         } catch (IOException e) {
             log.error("load error", e);
@@ -237,6 +253,42 @@ public class AvatarFactory extends AbstractFileBaseFactory{
         Map<Integer, Map<Boolean, AvatarPromoteExcelConfigData>> innerMap = avatarPromoteExcelConfigDataMapLevel.get(avatarPromoteId);
         if(innerMap != null && innerMap.containsKey(level)){
             return innerMap.get(level);
+        }
+        return null;
+    }
+
+    public AvatarSkillDepotExcelConfigData getAvatarSkillDepot(Long id){
+        if(avatarSkillDepotExcelConfigDataMap.containsKey(id)){
+            return avatarSkillDepotExcelConfigDataMap.get(id);
+        }
+        return null;
+    }
+
+    public AvatarSkillExcelConfigData getAvatarSkill(Long id){
+        if(avatarSkillExcelConfigDataMap.containsKey(id)){
+            return avatarSkillExcelConfigDataMap.get(id);
+        }
+        return null;
+    }
+
+    public Map<Integer, ProudSkillExcelConfigData> getProudSkillLevelMap(Long proudSkillGroupId){
+        if(proudSkillExcelConfigDataMapLevel.containsKey(proudSkillGroupId)){
+            return proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
+        }
+        return null;
+    }
+
+    public ProudSkillExcelConfigData getProudSkillByLevel(Long proudSkillGroupId, Integer level){
+        Map<Integer, ProudSkillExcelConfigData> innerMap = proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
+        if(innerMap != null && innerMap.containsKey(level)){
+            return innerMap.get(level);
+        }
+        return null;
+    }
+
+    public AvatarTalentExcelConfigData getAvatarTalent(Long talentId){
+        if(avatarTalentExcelConfigDataMap.containsKey(talentId)){
+            return avatarTalentExcelConfigDataMap.get(talentId);
         }
         return null;
     }
