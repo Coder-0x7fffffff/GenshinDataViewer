@@ -211,21 +211,23 @@ public class AvatarFactory extends AbstractFileBaseFactory{
         }else if(path.endsWith(SPLASH + avatarPromoteExcelConfigDataFile)){
             avatarPromoteExcelConfigDataMap.clear();
             avatarPromoteExcelConfigDataMapLevel.clear();
+        }else if(path.endsWith(SPLASH + avatarSkillDepotExcelConfigDataFile)){
+            avatarSkillDepotExcelConfigDataMap.clear();
+        }else if(path.endsWith(SPLASH + avatarSkillExcelConfigDataFile)){
+            avatarSkillExcelConfigDataMap.clear();
+        }else if(path.endsWith(SPLASH + proudSkillExcelConfigDataFile)){
+            proudSkillExcelConfigDataMapLevel.clear();
+        }else if(path.endsWith(SPLASH + avatarTalentExcelConfigDataFile)){
+            avatarTalentExcelConfigDataMap.clear();
         }
     }
 
 
     public AvatarExcelConfigData getAvatar(Long id){
-        if(!avatarExcelConfigDataMap.containsKey(id)){
-            return null;
-        }
         return avatarExcelConfigDataMap.get(id);
     }
 
     public AvatarLevelExcelConfigData getAvatarLevel(Integer level){
-        if(!avatarLevelExcelConfigDataMap.containsKey(level)){
-            return null;
-        }
         return avatarLevelExcelConfigDataMap.get(level);
     }
 
@@ -236,14 +238,11 @@ public class AvatarFactory extends AbstractFileBaseFactory{
     }
 
     public Map<Integer ,AvatarPromoteExcelConfigData> getAvatarPromoteMap(Long avatarPromoteId){
-        if(!avatarPromoteExcelConfigDataMap.containsKey(avatarPromoteId)){
-            return null;
-        }
         return avatarPromoteExcelConfigDataMap.get(avatarPromoteId);
     }
 
     public AvatarPromoteExcelConfigData getAvatarPromote(Long avatarPromoteId, Integer promoteLevel){
-        if(!avatarPromoteExcelConfigDataMap.containsKey(avatarPromoteId) || !avatarPromoteExcelConfigDataMap.get(avatarPromoteId).containsKey(promoteLevel)){
+        if(!avatarPromoteExcelConfigDataMap.containsKey(avatarPromoteId)){
             return null;
         }
         return avatarPromoteExcelConfigDataMap.get(avatarPromoteId).get(promoteLevel);
@@ -251,46 +250,34 @@ public class AvatarFactory extends AbstractFileBaseFactory{
 
     public Map<Boolean, AvatarPromoteExcelConfigData> getAvatarPromoteByLevel(Long avatarPromoteId, Integer level){
         Map<Integer, Map<Boolean, AvatarPromoteExcelConfigData>> innerMap = avatarPromoteExcelConfigDataMapLevel.get(avatarPromoteId);
-        if(innerMap != null && innerMap.containsKey(level)){
-            return innerMap.get(level);
+        if(innerMap == null){
+            return null;
         }
-        return null;
+        return innerMap.get(level);
     }
 
     public AvatarSkillDepotExcelConfigData getAvatarSkillDepot(Long id){
-        if(avatarSkillDepotExcelConfigDataMap.containsKey(id)){
-            return avatarSkillDepotExcelConfigDataMap.get(id);
-        }
-        return null;
+        return avatarSkillDepotExcelConfigDataMap.get(id);
     }
 
     public AvatarSkillExcelConfigData getAvatarSkill(Long id){
-        if(avatarSkillExcelConfigDataMap.containsKey(id)){
-            return avatarSkillExcelConfigDataMap.get(id);
-        }
-        return null;
+        return avatarSkillExcelConfigDataMap.get(id);
     }
 
     public Map<Integer, ProudSkillExcelConfigData> getProudSkillLevelMap(Long proudSkillGroupId){
-        if(proudSkillExcelConfigDataMapLevel.containsKey(proudSkillGroupId)){
-            return proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
-        }
-        return null;
+        return proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
     }
 
     public ProudSkillExcelConfigData getProudSkillByLevel(Long proudSkillGroupId, Integer level){
         Map<Integer, ProudSkillExcelConfigData> innerMap = proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
-        if(innerMap != null && innerMap.containsKey(level)){
-            return innerMap.get(level);
+        if(innerMap == null){
+            return null;
         }
-        return null;
+        return innerMap.get(level);
     }
 
     public AvatarTalentExcelConfigData getAvatarTalent(Long talentId){
-        if(avatarTalentExcelConfigDataMap.containsKey(talentId)){
-            return avatarTalentExcelConfigDataMap.get(talentId);
-        }
-        return null;
+        return avatarTalentExcelConfigDataMap.get(talentId);
     }
 
     @Cacheable(cacheNames = "AvatarFactory_name2Ids", unless = "#result.size() == 0")
@@ -308,7 +295,6 @@ public class AvatarFactory extends AbstractFileBaseFactory{
     }
 
     public Long getIdByName(Byte language, String name){
-        Map<String, Long> name2ids = getName2Ids(language);
-        return name2ids.get(name);
+        return getName2Ids(language).get(name);
     }
 }

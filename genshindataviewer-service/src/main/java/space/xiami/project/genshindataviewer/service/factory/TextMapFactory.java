@@ -145,10 +145,7 @@ public class TextMapFactory extends AbstractFileBaseFactory {
         private Map<Long, String> hashTextMap;
 
         public String getText(Long id){
-            if(hashTextMap.containsKey(id)){
-                return hashTextMap.get(id);
-            }
-            return null;
+            return hashTextMap.get(id);
         }
 
         public Byte getLanguage() {

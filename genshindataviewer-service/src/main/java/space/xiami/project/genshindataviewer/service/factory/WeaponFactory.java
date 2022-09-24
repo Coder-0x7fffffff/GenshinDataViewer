@@ -165,23 +165,14 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     }
 
     public WeaponCodexExcelConfigData getWeaponCodex(Long weaponId){
-        if(!weaponCodexExcelConfigDataMap.containsKey(weaponId)){
-            return null;
-        }
         return weaponCodexExcelConfigDataMap.get(weaponId);
     }
 
     public WeaponExcelConfigData getWeapon(Long id){
-        if(!weaponExcelConfigDataMap.containsKey(id)){
-            return null;
-        }
         return weaponExcelConfigDataMap.get(id);
     }
 
     public WeaponLevelExcelConfigData getWeaponLevel(Integer level){
-        if(!weaponLevelExcelConfigDataMap.containsKey(level)){
-            return null;
-        }
         return weaponLevelExcelConfigDataMap.get(level);
     }
 
@@ -192,14 +183,11 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     }
 
     public Map<Integer ,WeaponPromoteExcelConfigData> getWeaponPromoteMap(Long weaponPromoteId){
-        if(!weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId)){
-            return null;
-        }
         return weaponPromoteExcelConfigDataMap.get(weaponPromoteId);
     }
 
     public WeaponPromoteExcelConfigData getWeaponPromote(Long weaponPromoteId, Integer promoteLevel){
-        if(!weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId) || !weaponPromoteExcelConfigDataMap.get(weaponPromoteId).containsKey(promoteLevel)){
+        if(!weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId)){
             return null;
         }
         return weaponPromoteExcelConfigDataMap.get(weaponPromoteId).get(promoteLevel);
@@ -207,10 +195,10 @@ public class WeaponFactory extends AbstractFileBaseFactory {
 
     public Map<Boolean, WeaponPromoteExcelConfigData> getWeaponPromoteByLevel(Long weaponPromoteId, Integer level){
         Map<Integer, Map<Boolean, WeaponPromoteExcelConfigData>> innerMap = weaponPromoteExcelConfigDataMapLevel.get(weaponPromoteId);
-        if(innerMap != null && innerMap.containsKey(level)){
-            return innerMap.get(level);
+        if(innerMap == null){
+            return null;
         }
-        return null;
+        return innerMap.get(level);
     }
 
     @Cacheable(cacheNames = "WeaponFactory_name2Ids", unless = "#result.size() == 0")

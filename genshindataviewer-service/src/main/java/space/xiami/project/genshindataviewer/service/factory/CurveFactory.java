@@ -92,7 +92,7 @@ public class CurveFactory extends AbstractFileBaseFactory{
     }
 
     public Map<String, CurveExcelConfigData.CurveInfo> getCurveInfoMap(Byte curveType, Integer level){
-        if(!curveInfoMap.get(curveType).containsKey(level)){
+        if(!curveInfoMap.containsKey(curveType)){
             return null;
         }
         return curveInfoMap.get(curveType).get(level);

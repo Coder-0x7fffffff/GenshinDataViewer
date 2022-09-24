@@ -67,9 +67,6 @@ public abstract class AbstractSingleFactory<ExcelConfigData, GroupField> extends
     }
 
     public ExcelConfigData get(GroupField key){
-        if(excelConfigDataMap.containsKey(key)){
-            return excelConfigDataMap.get(key);
-        }
-        return null;
+        return excelConfigDataMap.get(key);
     }
 }

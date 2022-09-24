@@ -62,14 +62,11 @@ public class EquipAffixFactory extends AbstractFileBaseFactory {
     }
 
     public Map<Long ,EquipAffixExcelConfigData> getById(Long id){
-        if(!equipAffixExcelConfigDataMap.containsKey(id)){
-            return null;
-        }
         return equipAffixExcelConfigDataMap.get(id);
     }
 
     public EquipAffixExcelConfigData getByIdAffixId(Long id, Long affixId){
-        if(!equipAffixExcelConfigDataMap.containsKey(id) || !equipAffixExcelConfigDataMap.get(id).containsKey(affixId)){
+        if(!equipAffixExcelConfigDataMap.containsKey(id)){
             return null;
         }
         return equipAffixExcelConfigDataMap.get(id).get(affixId);
