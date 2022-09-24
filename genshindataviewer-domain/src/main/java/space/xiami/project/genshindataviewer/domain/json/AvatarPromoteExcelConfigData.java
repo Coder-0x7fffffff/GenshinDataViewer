@@ -5,22 +5,23 @@ import java.util.List;
 /**
  * @author Xiami
  */
-public class WeaponPromoteExcelConfigData {
+public class AvatarPromoteExcelConfigData {
 
-    private Long weaponPromoteId;
+    private Long avatarPromoteId;
     private Integer promoteLevel;
+    private String promoteAudio;
     private List<CostItem> costItems;
-    private Integer coinCost;
+    private Integer scoinCost;
     private List<AddProp> addProps;
     private Integer unlockMaxLevel;
     private Integer requiredPlayerLevel;
 
-    public Long getWeaponPromoteId() {
-        return weaponPromoteId;
+    public Long getAvatarPromoteId() {
+        return avatarPromoteId;
     }
 
-    public void setWeaponPromoteId(Long weaponPromoteId) {
-        this.weaponPromoteId = weaponPromoteId;
+    public void setAvatarPromoteId(Long avatarPromoteId) {
+        this.avatarPromoteId = avatarPromoteId;
     }
 
     public Integer getPromoteLevel() {
@@ -31,6 +32,14 @@ public class WeaponPromoteExcelConfigData {
         this.promoteLevel = promoteLevel;
     }
 
+    public String getPromoteAudio() {
+        return promoteAudio;
+    }
+
+    public void setPromoteAudio(String promoteAudio) {
+        this.promoteAudio = promoteAudio;
+    }
+
     public List<CostItem> getCostItems() {
         return costItems;
     }
@@ -39,12 +48,12 @@ public class WeaponPromoteExcelConfigData {
         this.costItems = costItems;
     }
 
-    public Integer getCoinCost() {
-        return coinCost;
+    public Integer getScoinCost() {
+        return scoinCost;
     }
 
-    public void setCoinCost(Integer coinCost) {
-        this.coinCost = coinCost;
+    public void setScoinCost(Integer scoinCost) {
+        this.scoinCost = scoinCost;
     }
 
     public List<AddProp> getAddProps() {

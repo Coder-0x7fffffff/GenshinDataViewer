@@ -34,26 +34,33 @@ public class WeaponFactory extends AbstractFileBaseFactory {
         relatedFilePath.add(PathUtil.getExcelBinOutputDirectory() + weaponPromoteExcelConfigDataFile);
     }
 
-    // weaponId -> DO
+    /**
+     * weaponId -> DO
+     */
     private final Map<Long, WeaponCodexExcelConfigData> weaponCodexExcelConfigDataMap = new HashMap<>();
 
-    // level -> DO
-    private final Map<Integer, WeaponCurveExcelConfigData> weaponCurveExcelConfigDataMap = new HashMap<>();
-    // level -> type -> DO
-    private final Map<Integer, Map<String, WeaponCurveExcelConfigData.CurveInfo>> weaponCurveInfoMap = new HashMap<>();
-
-    // Id(weaponId) -> DO
+    /**
+     * Id(weaponId) -> DO
+     */
     private final Map<Long, WeaponExcelConfigData> weaponExcelConfigDataMap = new HashMap<>();
 
-    // level -> DO
+    /**
+     * level -> DO
+     */
     private final Map<Integer, WeaponLevelExcelConfigData> weaponLevelExcelConfigDataMap = new HashMap<>();
 
-    // weaponPromoteId -> promoteLevel -> DO
+    /**
+     * weaponPromoteId -> promoteLevel -> DO
+     */
     private final Map<Long, Map<Integer, WeaponPromoteExcelConfigData>> weaponPromoteExcelConfigDataMap = new HashMap<>();
-    // weaponPromoteId -> level -> isPromote > DO
+    /**
+     * weaponPromoteId -> level -> isPromote > DO
+     */
     private final Map<Long, Map<Integer, Map<Boolean, WeaponPromoteExcelConfigData>>> weaponPromoteExcelConfigDataMapLevel = new HashMap<>();
 
-    // nameTextHash -> Id
+    /**
+     * nameTextHash -> Id
+     */
     private final Map<Long, Long> nameTextMapHash2Id = new HashMap<>();
 
     @Resource
@@ -67,7 +74,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     @Override
     public void load(String path) {
         try{
-            if(path.endsWith("/"+ weaponCodexExcelConfigDataFile)){
+            if(path.endsWith(SPLASH + weaponCodexExcelConfigDataFile)){
                 List<WeaponCodexExcelConfigData> array = readJsonArray(path, WeaponCodexExcelConfigData.class);
                 for(WeaponCodexExcelConfigData data : array){
                     if(weaponCodexExcelConfigDataMap.containsKey(data.getWeaponId())){
@@ -76,26 +83,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
                     }
                     weaponCodexExcelConfigDataMap.put(data.getWeaponId(), data);
                 }
-            }else if(path.endsWith("/"+ weaponCurveExcelConfigDataFile)){
-                List<WeaponCurveExcelConfigData> array = readJsonArray(path, WeaponCurveExcelConfigData.class);
-                for(WeaponCurveExcelConfigData data : array){
-                    if(weaponCurveExcelConfigDataMap.containsKey(data.getLevel())){
-                        log.warn("Ignore same weaponCurveExcelConfigData level={}", data.getLevel());
-                        continue;
-                    }
-                    weaponCurveExcelConfigDataMap.put(data.getLevel(), data);
-                    //curveInfo
-                    Map<String, WeaponCurveExcelConfigData.CurveInfo> innerMap = weaponCurveInfoMap.computeIfAbsent(data.getLevel(), v -> new HashMap<>());
-                    List<WeaponCurveExcelConfigData.CurveInfo> curveInfos = data.getCurveInfos();
-                    curveInfos.forEach(curveInfo -> {
-                        if(innerMap.containsKey(curveInfo.getType())){
-                            log.warn("Ignore same curveInfo type={}", curveInfo.getType());
-                            return;
-                        }
-                        innerMap.put(curveInfo.getType(), curveInfo);
-                    });
-                }
-            }else if(path.endsWith("/"+ weaponExcelConfigDataFile)){
+            }else if(path.endsWith(SPLASH + weaponExcelConfigDataFile)){
                 List<WeaponExcelConfigData> array = readJsonArray(path, WeaponExcelConfigData.class);
                 for(WeaponExcelConfigData data : array){
                     if(weaponExcelConfigDataMap.containsKey(data.getId())){
@@ -109,7 +97,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
                     }
                     nameTextMapHash2Id.put(data.getNameTextMapHash(), data.getId());
                 }
-            }else if(path.endsWith("/"+ weaponLevelExcelConfigDataFile)){
+            }else if(path.endsWith(SPLASH + weaponLevelExcelConfigDataFile)){
                 List<WeaponLevelExcelConfigData> array = readJsonArray(path, WeaponLevelExcelConfigData.class);
                 for(WeaponLevelExcelConfigData data : array){
                     if(weaponLevelExcelConfigDataMap.containsKey(data.getLevel())){
@@ -118,7 +106,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
                     }
                     weaponLevelExcelConfigDataMap.put(data.getLevel(), data);
                 }
-            }else if(path.endsWith("/"+ weaponPromoteExcelConfigDataFile)){
+            }else if(path.endsWith(SPLASH + weaponPromoteExcelConfigDataFile)){
                 List<WeaponPromoteExcelConfigData> array = readJsonArray(path, WeaponPromoteExcelConfigData.class);
                 for(WeaponPromoteExcelConfigData data : array){
                     Map<Integer, WeaponPromoteExcelConfigData> innerMap = weaponPromoteExcelConfigDataMap.computeIfAbsent(data.getWeaponPromoteId(), v -> new HashMap<>());
@@ -160,17 +148,14 @@ public class WeaponFactory extends AbstractFileBaseFactory {
 
     @Override
     protected void clear(String path) {
-        if(path.endsWith("/"+ weaponCodexExcelConfigDataFile)){
+        if(path.endsWith(SPLASH + weaponCodexExcelConfigDataFile)){
             weaponCodexExcelConfigDataMap.clear();
-        }else if(path.endsWith("/"+ weaponCurveExcelConfigDataFile)){
-            weaponCurveExcelConfigDataMap.clear();
-            weaponCurveInfoMap.clear();
-        }else if(path.endsWith("/"+ weaponExcelConfigDataFile)){
+        }else if(path.endsWith(SPLASH + weaponExcelConfigDataFile)){
             weaponExcelConfigDataMap.clear();
             nameTextMapHash2Id.clear();
-        }else if(path.endsWith("/"+ weaponLevelExcelConfigDataFile)){
+        }else if(path.endsWith(SPLASH + weaponLevelExcelConfigDataFile)){
             weaponLevelExcelConfigDataMap.clear();
-        }else if(path.endsWith("/"+ weaponPromoteExcelConfigDataFile)){
+        }else if(path.endsWith(SPLASH + weaponPromoteExcelConfigDataFile)){
             weaponPromoteExcelConfigDataMap.clear();
             weaponPromoteExcelConfigDataMapLevel.clear();
         }
@@ -181,21 +166,6 @@ public class WeaponFactory extends AbstractFileBaseFactory {
             return null;
         }
         return weaponCodexExcelConfigDataMap.get(weaponId);
-    }
-
-    public Map<String, WeaponCurveExcelConfigData.CurveInfo> getWeaponCurveInfoMap(Integer level){
-        if(!weaponCurveInfoMap.containsKey(level)){
-            return null;
-        }
-        return weaponCurveInfoMap.get(level);
-    }
-
-    public WeaponCurveExcelConfigData.CurveInfo getWeaponCurveInfo(Integer level, String type){
-        Map<String, WeaponCurveExcelConfigData.CurveInfo> curveMap = getWeaponCurveInfoMap(level);
-        if(curveMap == null){
-            return null;
-        }
-        return curveMap.get(type);
     }
 
     public WeaponExcelConfigData getWeapon(Long id){

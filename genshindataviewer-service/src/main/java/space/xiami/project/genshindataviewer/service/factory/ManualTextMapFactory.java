@@ -36,7 +36,7 @@ public class ManualTextMapFactory extends AbstractFileBaseFactory{
     @Override
     public void load(String path) {
         try{
-            if(path.endsWith("/"+ manualTextMapConfigDataFile)) {
+            if(path.endsWith(SPLASH + manualTextMapConfigDataFile)) {
                 List<ManualTextMapConfigData> array = readJsonArray(path, ManualTextMapConfigData.class);
                 for (ManualTextMapConfigData data : array) {
                     if(manualTextMapConfigDataMap.containsKey(data.getTextMapId())){
@@ -53,7 +53,7 @@ public class ManualTextMapFactory extends AbstractFileBaseFactory{
 
     @Override
     protected void clear(String path) {
-        if(path.endsWith("/"+ manualTextMapConfigDataFile)) {
+        if(path.endsWith(SPLASH + manualTextMapConfigDataFile)) {
             manualTextMapConfigDataMap.clear();
         }
     }

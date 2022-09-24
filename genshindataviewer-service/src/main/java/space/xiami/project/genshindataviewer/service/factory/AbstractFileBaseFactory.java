@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractFileBaseFactory implements FileBaseFactory {
 
-    private Logger log = LoggerFactory.getLogger(AbstractFileBaseFactory.class);
+    private final Logger log = LoggerFactory.getLogger(AbstractFileBaseFactory.class);
+
+    protected static final String SPLASH = "/";
 
     protected abstract void load(String path);
 

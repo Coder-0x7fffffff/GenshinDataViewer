@@ -5,19 +5,24 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.service.util.PathUtil;
 import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
+import space.xiami.project.genshindataviewer.service.util.PathUtil;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class TextMapFactory extends AbstractFileBaseFactory {
 
     private static final Logger log = LoggerFactory.getLogger(TextMapFactory.class);
+
+    private static final Pattern paramPattern = Pattern.compile("(\\{.*?})");
+    private static final Pattern arrayParamPattern = Pattern.compile("\\{param(.*):(.*)}");
 
     private static final String filePathPrefix = "TextMap";
     private static final String filePathSuffix = ".json";
@@ -93,13 +98,44 @@ public class TextMapFactory extends AbstractFileBaseFactory {
     }
 
     public String getText(Byte language, Long hash){
+        return getText(language, hash, null);
+    }
+
+    public String getText(Byte language, Long hash, List<Double> params){
         if(hash == null || language == null){
             return null;
         }
         if(language2TextMap.containsKey(language)){
-            return language2TextMap.get(language).getText(hash);
+            String text = language2TextMap.get(language).getText(hash);
+            if(params != null){
+                text = replaceParam(text, params);
+            }
+            return text;
         }
         return null;
+    }
+
+    public static String replaceParam(String text, List<Double> params){
+        Matcher paramMatcher = paramPattern.matcher(text);
+        String result = text;
+        while (paramMatcher.find()){
+            for(int i=1; i<=paramMatcher.groupCount(); i++){
+                String paramText = paramMatcher.group(i);
+                Matcher matcher;
+                if((matcher = arrayParamPattern.matcher(paramText)).matches()){
+                    int index = Integer.parseInt(matcher.group(1));
+                    // TODO 解析 pat字符串 String pat = matcher.group(2);
+                    if(params == null || index >= params.size()){
+                        log.warn("Out bound param index, param={}, index={}", paramText, index);
+                        continue;
+                    }
+                    result = result.replace(paramText, String.valueOf(params.get(index)));
+                }else{
+                    log.warn("Unknown param format, param={}", paramText);
+                }
+            }
+        }
+        return result;
     }
 
     public static class TextMap{

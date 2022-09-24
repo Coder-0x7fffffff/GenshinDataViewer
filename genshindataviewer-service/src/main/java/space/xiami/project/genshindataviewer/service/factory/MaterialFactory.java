@@ -36,7 +36,7 @@ public class MaterialFactory extends AbstractFileBaseFactory{
     @Override
     public void load(String path) {
         try{
-            if(path.endsWith("/"+ materialExcelConfigDataFile)) {
+            if(path.endsWith(SPLASH + materialExcelConfigDataFile)) {
                 List<MaterialExcelConfigData> array = readJsonArray(path, MaterialExcelConfigData.class);
                 for (MaterialExcelConfigData data : array) {
                     if(materialExcelConfigDataMap.containsKey(data.getId())){
@@ -53,7 +53,7 @@ public class MaterialFactory extends AbstractFileBaseFactory{
 
     @Override
     protected void clear(String path) {
-        if(path.endsWith("/"+ materialExcelConfigDataFile)) {
+        if(path.endsWith(SPLASH + materialExcelConfigDataFile)) {
             materialExcelConfigDataMap.clear();
         }
     }

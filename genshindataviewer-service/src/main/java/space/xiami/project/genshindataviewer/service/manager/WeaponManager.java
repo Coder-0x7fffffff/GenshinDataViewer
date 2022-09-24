@@ -1,18 +1,19 @@
 package space.xiami.project.genshindataviewer.service.manager;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.service.factory.ManualTextMapFactory;
-import space.xiami.project.genshindataviewer.service.factory.MaterialFactory;
-import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
-import space.xiami.project.genshindataviewer.service.factory.WeaponFactory;
+import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshindataviewer.domain.model.LevelProperty;
+import space.xiami.project.genshindataviewer.service.factory.*;
 import space.xiami.project.genshindataviewer.domain.json.AddProp;
-import space.xiami.project.genshindataviewer.domain.json.WeaponCurveExcelConfigData;
+import space.xiami.project.genshindataviewer.domain.json.CurveExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.json.WeaponExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.json.WeaponPromoteExcelConfigData;
 import space.xiami.project.genshindataviewer.domain.model.EquipAffix;
 import space.xiami.project.genshindataviewer.domain.model.Weapon;
+import space.xiami.project.genshindataviewer.service.util.CurveUtil;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -37,6 +38,9 @@ public class WeaponManager {
 
     @Resource
     private EquipAffixManager equipAffixManager;
+
+    @Resource
+    private CurveManager curveManager;
 
     public Map<String, Long> getWeaponIds(Byte language){
         return weaponFactory.getName2Ids(language);
@@ -119,7 +123,7 @@ public class WeaponManager {
             return cost;
         }).collect(Collectors.toList()));
         //set weaponProperties
-        Map<String, List<Weapon.WeaponProperty.Property>> levelStr2PropertyMap = new HashMap<>();
+        Map<String, List<LevelProperty.Property>> levelStr2PropertyMap = new HashMap<>();
         List<Integer> levels = weaponFactory.getSortedLevel();
         excelConfigData.getWeaponProp().forEach(weaponProp -> {
             // 获取prop数据
@@ -133,7 +137,7 @@ public class WeaponManager {
             String propTypeText = manualTextMapFactory.getText(lang, propType);
             levels.forEach(level -> {
                 // 获取武器等级提升
-                WeaponCurveExcelConfigData.CurveInfo curveInfo = weaponFactory.getWeaponCurveInfo(level, type);
+                CurveExcelConfigData.CurveInfo curveInfo = curveManager.getCurveInfo(CurveEnum.WEAPON.getCode(), level, type);
                 // 获取武器进阶提升
                 Map<Boolean, WeaponPromoteExcelConfigData> promoteByLevel = weaponFactory.getWeaponPromoteByLevel(excelConfigData.getWeaponPromoteId(), level);
                 if(promoteByLevel == null){
@@ -149,17 +153,17 @@ public class WeaponManager {
                         }
                     }
                     // 计算属性值
-                    double value = calculateCurveInfo(initValue, curveInfo, promoteValue);
+                    double value = CurveUtil.calculateCurveInfo(initValue, curveInfo, promoteValue);
                     String levelStr = level + (isPromote ? "+" : "");
                     // 构建属性数据
-                    Weapon.WeaponProperty.Property property = new Weapon.WeaponProperty.Property();
+                    LevelProperty.Property property = new LevelProperty.Property();
                     property.setPropType(propTypeText);
                     property.setValue(value);
                     levelStr2PropertyMap.computeIfAbsent(levelStr, v -> new ArrayList<>()).add(property);
                 });
             });
         });
-        List<Weapon.WeaponProperty> weaponProperties = new ArrayList<>();
+        List<LevelProperty> weaponProperties = new ArrayList<>();
         List<String> sortedLevelStr = new ArrayList<>(levelStr2PropertyMap.keySet());
         sortedLevelStr.sort((o1, o2) -> {
             int o1v = o1.endsWith("+") ?
@@ -171,7 +175,7 @@ public class WeaponManager {
             return o1v - o2v;
         });
         for(String levelStr : sortedLevelStr){
-            Weapon.WeaponProperty weaponProperty = new Weapon.WeaponProperty();
+            LevelProperty weaponProperty = new LevelProperty();
             weaponProperty.setLevel(levelStr);
             weaponProperty.setProperties(levelStr2PropertyMap.get(levelStr));
             weaponProperties.add(weaponProperty);
@@ -179,17 +183,5 @@ public class WeaponManager {
         weapon.setWeaponProperties(weaponProperties);
         //TODO 结构化武器故事
         return weapon;
-    }
-
-    public Double calculateCurveInfo(Double initValue, WeaponCurveExcelConfigData.CurveInfo curveInfo, Double promoteValue){
-        String curveArith = curveInfo.getArith();
-        Double curveValue = curveInfo.getValue();
-        double value = 0.0;
-        if(curveArith.endsWith("ARITH_MULTI")){
-            value = initValue * curveValue + promoteValue;
-        }else{
-            log.warn("Unknown arith:{}", curveArith);
-        }
-        return value;
     }
 }

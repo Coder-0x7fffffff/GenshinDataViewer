@@ -1,5 +1,8 @@
 package space.xiami.project.genshindataviewer.domain.json;
 
+/**
+ * @author Xiami
+ */
 public class AddProp{
     private String propType;
     private Double value;

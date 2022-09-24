@@ -5,10 +5,10 @@ import java.util.List;
 /**
  * @author Xiami
  */
-public class WeaponLevelExcelConfigData {
+public class AvatarLevelExcelConfigData {
 
     private Integer level;
-    private List<Integer> requiredExps;
+    private Integer exp;
 
     public Integer getLevel() {
         return level;
@@ -18,11 +18,11 @@ public class WeaponLevelExcelConfigData {
         this.level = level;
     }
 
-    public List<Integer> getRequiredExps() {
-        return requiredExps;
+    public Integer getExp() {
+        return exp;
     }
 
-    public void setRequiredExps(List<Integer> requiredExps) {
-        this.requiredExps = requiredExps;
+    public void setExp(Integer exp) {
+        this.exp = exp;
     }
 }

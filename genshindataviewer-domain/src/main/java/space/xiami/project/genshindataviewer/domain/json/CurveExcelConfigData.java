@@ -2,7 +2,10 @@ package space.xiami.project.genshindataviewer.domain.json;
 
 import java.util.List;
 
-public class WeaponCurveExcelConfigData {
+/**
+ * @author Xiami
+ */
+public class CurveExcelConfigData {
 
     private Integer level;
 

@@ -33,7 +33,7 @@ public class EquipAffixFactory extends AbstractFileBaseFactory {
     @Override
     public void load(String path) {
         try{
-            if(path.endsWith("/"+ equipAffixExcelConfigDataFile)) {
+            if(path.endsWith(SPLASH + equipAffixExcelConfigDataFile)) {
                 List<EquipAffixExcelConfigData> array = readJsonArray(path, EquipAffixExcelConfigData.class);
                 for (EquipAffixExcelConfigData data : array) {
                     Map<Long, EquipAffixExcelConfigData> innerMap = equipAffixExcelConfigDataMap.computeIfAbsent(data.getId(), v -> new HashMap<>());
@@ -51,7 +51,7 @@ public class EquipAffixFactory extends AbstractFileBaseFactory {
 
     @Override
     protected void clear(String path) {
-        if(path.endsWith("/"+ equipAffixExcelConfigDataFile)) {
+        if(path.endsWith(SPLASH + equipAffixExcelConfigDataFile)) {
             equipAffixExcelConfigDataMap.clear();
         }
     }

@@ -1,10 +1,6 @@
 package space.xiami.project.genshindataviewer.domain.model;
 
-import space.xiami.project.genshindataviewer.domain.json.WeaponExcelConfigData;
-import space.xiami.project.genshindataviewer.domain.json.WeaponPromoteExcelConfigData;
-
 import java.util.List;
-import java.util.Map;
 
 public class Weapon {
     // 映射数据
@@ -41,9 +37,9 @@ public class Weapon {
      */
     private List<WeaponEquipAffix> weaponEquipAffixes;
     /**
-     * 武器属性 weaponProp -> WeaponCurveExcelConfigData; List<WeaponProperty>
+     * 武器属性
      */
-    private List<WeaponProperty> weaponProperties;
+    private List<LevelProperty> weaponProperties;
     /**
      * 武器突破材料
      */
@@ -117,11 +113,11 @@ public class Weapon {
         this.weaponEquipAffixes = weaponEquipAffixes;
     }
 
-    public List<WeaponProperty> getWeaponProperties() {
+    public List<LevelProperty> getWeaponProperties() {
         return weaponProperties;
     }
 
-    public void setWeaponProperties(List<WeaponProperty> weaponProperties) {
+    public void setWeaponProperties(List<LevelProperty> weaponProperties) {
         this.weaponProperties = weaponProperties;
     }
 
@@ -216,48 +212,6 @@ public class Weapon {
 
             public void setCount(Integer count) {
                 this.count = count;
-            }
-        }
-    }
-
-    public static class WeaponProperty{
-        private String level;
-        private List<Property> properties;
-
-        public String getLevel() {
-            return level;
-        }
-
-        public void setLevel(String level) {
-            this.level = level;
-        }
-
-        public List<Property> getProperties() {
-            return properties;
-        }
-
-        public void setProperties(List<Property> properties) {
-            this.properties = properties;
-        }
-
-        public static class Property{
-            private String propType; // 通过ManualTextMapConfigData映射得到的名称
-            private Double value; // initValue 通过type定义的ARITH操作后得到的结果 + promote对应的突破增加的属性
-
-            public String getPropType() {
-                return propType;
-            }
-
-            public void setPropType(String propType) {
-                this.propType = propType;
-            }
-
-            public Double getValue() {
-                return value;
-            }
-
-            public void setValue(Double value) {
-                this.value = value;
             }
         }
     }

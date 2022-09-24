@@ -12,17 +12,17 @@ public class Avatar {
     private Long id;
 
     /**
-     * 名称 TODO nameTextMapHash映射
+     * 名称
      */
     private String name;
 
     /**
-     * 描述 TODO descTextMapHash映射
+     * 描述
      */
     private String desc;
 
     /**
-     * 武器类型 TODO ManualTextMapFactory::getText
+     * 武器类型
      */
     private String weaponType;
 
@@ -57,9 +57,9 @@ public class Avatar {
     private Double criticalHurt;
 
     /**
-     * 等级提升属性加成 TODO 解析+计算
+     * 属性
      */
-    private List<AvatarExcelConfigData.PropGrowCurve> propGrowCurves;
+    private List<LevelProperty> avatarProperties;
 
     /**
      * 初始武器
@@ -72,7 +72,11 @@ public class Avatar {
     private Boolean isRangeAttack;
 
     /**
-     * 技能 TODO skillDepotId
+     * 技能
+     * TODO 解析
+     * -skillDepotId-> AvatarSkillDepotExcelConfigData
+     * -skill/energySkill-> AvatarSkillExcelConfigData
+     * -proudSkillGroupId-> ProudSkillExcelConfigData
      */
     private Long skillDepotId;
 
@@ -196,12 +200,12 @@ public class Avatar {
         this.criticalHurt = criticalHurt;
     }
 
-    public List<AvatarExcelConfigData.PropGrowCurve> getPropGrowCurves() {
-        return propGrowCurves;
+    public List<LevelProperty> getAvatarProperties() {
+        return avatarProperties;
     }
 
-    public void setPropGrowCurves(List<AvatarExcelConfigData.PropGrowCurve> propGrowCurves) {
-        this.propGrowCurves = propGrowCurves;
+    public void setAvatarProperties(List<LevelProperty> avatarProperties) {
+        this.avatarProperties = avatarProperties;
     }
 
     public Weapon getInitialWeapon() {
