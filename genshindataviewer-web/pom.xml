@@ -41,8 +41,8 @@
         </dependency>
         <dependency>
             <groupId>space.xiami.project.genshindataviewer</groupId>
-            <artifactId>genshindataviewer-client</artifactId>
-            <version>${genshindataviewer-client.version}</version>
+            <artifactId>genshindataviewer-service</artifactId>
+            <version>${genshindataviewer-service.version}</version>
         </dependency>
 
         <dependency>

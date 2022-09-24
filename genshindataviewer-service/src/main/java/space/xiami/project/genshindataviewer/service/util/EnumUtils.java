@@ -1,4 +1,4 @@
-package space.xiami.project.genshindataviewer.client.util;
+package space.xiami.project.genshindataviewer.service.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +8,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Xiami
+ */
 public class EnumUtils {
 
     private static final Logger log = LoggerFactory.getLogger(EnumUtils.class);
 
-    //Enum, Code, Desc
+    //Enum -> Code -> Desc
     public static Map<String, Map<Byte, String>> enumValueDesc = new HashMap<>();
 
     static {
