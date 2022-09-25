@@ -2,6 +2,7 @@ package space.xiami.project.genshindataviewer.web.controler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import space.xiami.project.genshindataviewer.domain.ResultVO;
 import space.xiami.project.genshindataviewer.web.scheduled.ResourceScheduled;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +29,9 @@ public class BaseDataController {
 
     @Resource
     private ResourceScheduled resourceScheduled;
+
+    @Value("${admin.password}")
+    private String password;
 
     @RequestMapping("/text")
     @ResponseBody
@@ -50,15 +55,20 @@ public class BaseDataController {
 
     @RequestMapping("refresh")
     @ResponseBody
-    public ResultVO refresh(){
+    public ResultVO refresh(String pass){
         String error = null;
+        Map<String, List<String>> ret = null;
         try{
-            resourceScheduled.refreshResource();
+            if(password.equals(pass)){
+                ret = resourceScheduled.refreshResource();
+            }else{
+                error = "密码错误";
+            }
         }catch (Exception e){
             error = e.getMessage();
         }
         if(error == null){
-            return ResultVO.buildSuccessResult("强制刷新数据成功");
+            return ResultVO.buildSuccessResult(ret);
         }
         return ResultVO.buildErrorResult(error);
     }

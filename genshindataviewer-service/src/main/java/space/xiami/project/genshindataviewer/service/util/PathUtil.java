@@ -10,23 +10,82 @@ import java.util.List;
  */
 public class PathUtil {
 
+    /**
+     * 本地资源路径
+     */
     private static final String resourceDirectory = "resources/";
-    private static final String dataDirectory = "GenshinData/";
 
+    /**
+     * 远程资源路径
+     */
+    private static final String remoteDirectory = "";
+
+    /**
+     * 数据资源目录
+     */
+    private static final String dataDirectory = "GenshinData/";
     public static final String textMap = "TextMap/";
     public static final String excelBinOutput = "ExcelBinOutput/";
     public static final String readable = "Readable/";
 
     public static String getExcelBinOutputDirectory(){
-        return resourceDirectory + dataDirectory + excelBinOutput;
+        return getLocalDataDirectory() + dataDirectory + excelBinOutput;
     }
 
     public static String getReadableDirectory(){
-        return resourceDirectory + dataDirectory + readable;
+        return getLocalDataDirectory() + dataDirectory + readable;
     }
 
     public static String getTextMapDirectory(){
-        return resourceDirectory + dataDirectory + textMap;
+        return getLocalDataDirectory() + dataDirectory + textMap;
+    }
+
+    /**
+     * 获取本地资源路径
+     * @return 本地资源路径
+     */
+    public static String getLocalDataDirectory(){
+        return resourceDirectory;
+    }
+
+    public static String getRemoteDataDirectory(){
+        return remoteDirectory;
+    }
+
+    /**
+     * 转换数据本地路径到远程路径
+     * @param path 本地路径
+     * @return 远程路径
+     */
+    public static String localPath2RemotePath(String path){
+        return getRemoteDataDirectory() + localPath2ResourcePath(path);
+    }
+
+    /**
+     * 转远程路径到换数据本地路径
+     * @param path 远程路径
+     * @return 本地路径
+     */
+    public static String remotePath2LocalPath(String path){
+        return getLocalDataDirectory() + remotePath2ResourcePath(path);
+    }
+
+    /**
+     * 本地目录到资源相关路径
+     * @param path 本地路径
+     * @return 资源路径
+     */
+    public static String localPath2ResourcePath(String path){
+        return path.substring(getLocalDataDirectory().length());
+    }
+
+    /**
+     * 远程路径到资源相关路径
+     * @param path 远程路径
+     * @return 资源路径
+     */
+    public static String remotePath2ResourcePath(String path){
+        return path.substring(getRemoteDataDirectory().length());
     }
 
     public static List<String> listFilePaths(String path){
