@@ -24,26 +24,7 @@
         <genshindataviewer-domain.version>1.0.0-SNAPSHOT</genshindataviewer-domain.version>
         <genshindataviewer-service.version>1.0.0-SNAPSHOT</genshindataviewer-service.version>
         <genshindataviewer-client.version>1.0.0-SNAPSHOT</genshindataviewer-client.version>
-
-        <fastjson.version>2.0.12.graal</fastjson.version>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>space.xiami.project.genshindataviewer.web.Application</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
@@ -57,7 +38,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
+            <version>2.0.12.graal</version>
         </dependency>
 
         <dependency>

@@ -16,23 +16,6 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>space.xiami.project.genshindataviewer.web.Application</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>space.xiami.project.genshindataviewer</groupId>
@@ -55,25 +38,25 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>2.7.3</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.contentobjects.jnotify</groupId>
-            <artifactId>jnotify</artifactId>
-            <version>0.94</version>
-        </dependency>
     </dependencies>
 
-    <!-- 在central库中没有这个包，需要添加以下的repo -->
-    <repositories>
-        <repository>
-            <id>bintray</id>
-            <url>http://dl.bintray.com/typesafe/maven-releases/</url>
-        </repository>
-    </repositories>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.3</version>
+                <configuration>
+                    <mainClass>space.xiami.project.genshindataviewer.web.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
