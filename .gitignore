@@ -1,3 +1,11 @@
+# IDEA
 .idea
-**/GenshinData
-**/target
+
+# 过于庞大的数据文件
+/resources/
+
+# 打包编译临时文件
+target/
+
+# 打包输出
+/output/

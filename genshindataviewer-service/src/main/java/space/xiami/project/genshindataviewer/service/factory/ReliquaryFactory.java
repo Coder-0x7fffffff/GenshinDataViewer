@@ -2,7 +2,6 @@ package space.xiami.project.genshindataviewer.service.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.domain.json.ReliquaryExcelConfigData;
@@ -102,7 +101,6 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
     }
 
 
-    @Cacheable(cacheNames = "WeaponFactory_name2Ids", unless = "#result.size() == 0")
     public Map<String, List<Long>> getName2Ids(Byte language){
         Map<String, List<Long>> name2Ids = new HashMap<>();
         nameTextMapHash2Ids.forEach((hash, ids) -> {

@@ -26,50 +26,50 @@ public class ReliquaryController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public ResultVO list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
+    public ResultVO<Map<String, List<Long>>> list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
         ResultDO<Map<String, List<Long>>> ret = reliquaryService.getReliquaryIds(lang);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_id")
     @ResponseBody
-    public ResultVO getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+    public ResultVO<List<Long>> getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
         ResultDO<List<Long>> ret = reliquaryService.getReliquaryId(lang, name);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_by_name")
     @ResponseBody
-    public ResultVO getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+    public ResultVO<List<Reliquary>> getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
         ResultDO<List<Reliquary>> ret = reliquaryService.getReliquaries(lang, name);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_by_id")
     @ResponseBody
-    public ResultVO getById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
+    public ResultVO<Reliquary> getById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
         ResultDO<Reliquary> ret = reliquaryService.getReliquary(lang, id);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_set_by_id")
     @ResponseBody
-    public ResultVO getSetById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
+    public ResultVO<ReliquarySet> getSetById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
         ResultDO<ReliquarySet> ret = reliquaryService.getReliquarySet(lang, id);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }

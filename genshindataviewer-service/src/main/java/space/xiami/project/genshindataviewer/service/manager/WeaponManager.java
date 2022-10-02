@@ -3,7 +3,7 @@ package space.xiami.project.genshindataviewer.service.manager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.CurveEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshindataviewer.service.factory.*;

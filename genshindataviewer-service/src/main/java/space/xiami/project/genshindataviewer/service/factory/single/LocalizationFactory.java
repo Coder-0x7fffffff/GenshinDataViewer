@@ -3,7 +3,7 @@ package space.xiami.project.genshindataviewer.service.factory.single;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
+import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.json.LocalizationExcelConfigData;
 import space.xiami.project.genshindataviewer.service.util.FileUtil;
 import space.xiami.project.genshindataviewer.service.util.PathUtil;

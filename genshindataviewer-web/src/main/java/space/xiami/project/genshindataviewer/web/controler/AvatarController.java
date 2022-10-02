@@ -27,7 +27,7 @@ public class AvatarController {
     public ResultVO list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
         ResultDO<Map<String, Long>> ret = avatarService.getAvatarIds(lang);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
@@ -37,7 +37,7 @@ public class AvatarController {
     public ResultVO getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
         ResultDO<Long> ret = avatarService.getAvatarId(lang, name);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
@@ -47,7 +47,7 @@ public class AvatarController {
     public ResultVO getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
         ResultDO<Avatar> ret = avatarService.getAvatar(lang, name);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
@@ -57,7 +57,7 @@ public class AvatarController {
     public ResultVO getById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
         ResultDO<Avatar> ret = avatarService.getAvatar(lang, id);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }

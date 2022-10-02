@@ -47,6 +47,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.3</version>
                 <configuration>
+                    <finalName>genshindataviewer</finalName>
                     <mainClass>space.xiami.project.genshindataviewer.web.Application</mainClass>
                 </configuration>
                 <executions>

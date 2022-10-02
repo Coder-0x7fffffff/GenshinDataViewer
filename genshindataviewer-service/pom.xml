@@ -18,9 +18,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>space.xiami.project.genshindataviewer</groupId>
-            <artifactId>genshindataviewer-common</artifactId>
-            <version>${genshindataviewer-common.version}</version>
+            <groupId>space.xiami.project.genshincommon</groupId>
+            <artifactId>GenshinCommon</artifactId>
+            <version>${genshincommon.version}</version>
         </dependency>
         <dependency>
             <groupId>space.xiami.project.genshindataviewer</groupId>

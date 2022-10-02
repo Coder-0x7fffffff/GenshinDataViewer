@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
-import space.xiami.project.genshindataviewer.service.factory.*;
+import space.xiami.project.genshindataviewer.service.factory.AvatarFactory;
+import space.xiami.project.genshindataviewer.service.factory.CurveFactory;
+import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.MaterialFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.RewardFactory;
@@ -72,8 +75,8 @@ public class AvatarManager {
         }
         return convert(lang, excelConfigData);
     }
-    
-    public Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData){
+
+    private Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData){
         Avatar avatar = new Avatar();
         avatar.setId(excelConfigData.getId());
         avatar.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));

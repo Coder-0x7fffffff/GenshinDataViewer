@@ -2,7 +2,6 @@ package space.xiami.project.genshindataviewer.service.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.domain.json.*;
@@ -280,7 +279,6 @@ public class AvatarFactory extends AbstractFileBaseFactory{
         return avatarTalentExcelConfigDataMap.get(talentId);
     }
 
-    @Cacheable(cacheNames = "AvatarFactory_name2Ids", unless = "#result.size() == 0")
     public Map<String, Long> getName2Ids(Byte language){
         Map<String, Long> name2Ids = new HashMap<>();
         nameTextMapHash2Id.forEach((hash, id) -> {

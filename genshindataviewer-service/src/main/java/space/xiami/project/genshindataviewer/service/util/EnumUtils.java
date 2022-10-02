@@ -2,7 +2,7 @@ package space.xiami.project.genshindataviewer.service.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
+import space.xiami.project.genshincommon.enums.LanguageEnum;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
