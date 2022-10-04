@@ -17,6 +17,9 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class WeaponManager {
 
@@ -80,14 +83,14 @@ public class WeaponManager {
         return convertInfo(lang, excelConfigData);
     }
 
-    public WeaponInfo convertInfo(Byte lang, WeaponExcelConfigData excelConfigData){
+    private WeaponInfo convertInfo(Byte lang, WeaponExcelConfigData excelConfigData){
         WeaponInfo weaponInfo = new WeaponInfo();
         weaponInfo.setId(excelConfigData.getId());
         weaponInfo.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));
         return weaponInfo;
     }
 
-    public Weapon convert(Byte lang, WeaponExcelConfigData excelConfigData){
+    private Weapon convert(Byte lang, WeaponExcelConfigData excelConfigData){
         Weapon weapon = new Weapon();
         weapon.setId(excelConfigData.getId());
         weapon.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));
