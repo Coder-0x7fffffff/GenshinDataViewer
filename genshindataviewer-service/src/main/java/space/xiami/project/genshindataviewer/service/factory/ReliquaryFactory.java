@@ -93,15 +93,22 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
     }
 
     public ReliquarySetExcelConfigData getReliquarySet(Long setId){
-        return reliquarySetExcelConfigDataMap.get(setId);
+        readLock();
+        ReliquarySetExcelConfigData result = reliquarySetExcelConfigDataMap.get(setId);
+        readUnlock();
+        return result;
     }
 
     public ReliquaryExcelConfigData getReliquary(Long id){
-        return reliquaryExcelConfigDataMap.get(id);
+        readLock();
+        ReliquaryExcelConfigData result = reliquaryExcelConfigDataMap.get(id);
+        readUnlock();
+        return result;
     }
 
 
     public Map<String, List<Long>> getName2Ids(Byte language){
+        readLock();
         Map<String, List<Long>> name2Ids = new HashMap<>();
         nameTextMapHash2Ids.forEach((hash, ids) -> {
             String name = textMapFactory.getText(language, hash);
@@ -111,6 +118,7 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
                 name2Ids.put(String.valueOf(hash), ids);
             }
         });
+        readUnlock();
         return name2Ids;
     }
 

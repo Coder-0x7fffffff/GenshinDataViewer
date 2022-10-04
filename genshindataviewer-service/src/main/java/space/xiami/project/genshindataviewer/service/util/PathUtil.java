@@ -88,6 +88,11 @@ public class PathUtil {
         return path.substring(getRemoteDataDirectory().length());
     }
 
+    /**
+     * 获取文件列表
+     * @param path 目录
+     * @return 结果
+     */
     public static List<String> listFilePaths(String path){
         File dir = new File(path);
         if(!dir.exists()){
@@ -98,7 +103,11 @@ public class PathUtil {
             if(files!=null){
                 List<String> paths = new ArrayList<>(files.length);
                 for(File file : files){
-                    paths.add(file.getPath());
+                    if(file.isDirectory()){
+                        paths.addAll(listFilePaths(file.getPath()));
+                    }else{
+                        paths.add(file.getPath());
+                    }
                 }
                 return paths;
             }

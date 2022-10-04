@@ -92,14 +92,19 @@ public class CurveFactory extends AbstractFileBaseFactory{
     }
 
     public Map<String, CurveExcelConfigData.CurveInfo> getCurveInfoMap(Byte curveType, Integer level){
-        if(!curveInfoMap.containsKey(curveType)){
-            return null;
+        readLock();
+        Map<String, CurveExcelConfigData.CurveInfo> result = null;
+        if(curveInfoMap.containsKey(curveType)){
+            result = curveInfoMap.get(curveType).get(level);
         }
-        return curveInfoMap.get(curveType).get(level);
+        readUnlock();
+        return result;
     }
 
     public CurveExcelConfigData.CurveInfo getCurveInfo(Byte curveType, Integer level, String type){
+        readLock();
         Map<String, CurveExcelConfigData.CurveInfo> curveMap = getCurveInfoMap(curveType, level);
+        readUnlock();
         if(curveMap == null){
             return null;
         }

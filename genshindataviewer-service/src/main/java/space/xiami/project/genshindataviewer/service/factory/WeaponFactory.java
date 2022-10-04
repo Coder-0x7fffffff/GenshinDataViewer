@@ -164,43 +164,64 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     }
 
     public WeaponCodexExcelConfigData getWeaponCodex(Long weaponId){
-        return weaponCodexExcelConfigDataMap.get(weaponId);
+        readLock();
+        WeaponCodexExcelConfigData result = weaponCodexExcelConfigDataMap.get(weaponId);
+        readUnlock();
+        return result;
     }
 
     public WeaponExcelConfigData getWeapon(Long id){
-        return weaponExcelConfigDataMap.get(id);
+        readLock();
+        WeaponExcelConfigData result = weaponExcelConfigDataMap.get(id);
+        readUnlock();
+        return result;
     }
 
     public WeaponLevelExcelConfigData getWeaponLevel(Integer level){
-        return weaponLevelExcelConfigDataMap.get(level);
+        readLock();
+        WeaponLevelExcelConfigData result = weaponLevelExcelConfigDataMap.get(level);
+        readUnlock();
+        return result;
     }
 
     public List<Integer> getSortedLevel(){
+        readLock();
         ArrayList<Integer> levelList = new ArrayList<>(weaponLevelExcelConfigDataMap.keySet());
+        readUnlock();
         levelList.sort(Comparator.comparingInt(o -> o));
         return levelList;
     }
 
     public Map<Integer ,WeaponPromoteExcelConfigData> getWeaponPromoteMap(Long weaponPromoteId){
-        return weaponPromoteExcelConfigDataMap.get(weaponPromoteId);
+        readLock();
+        Map<Integer, WeaponPromoteExcelConfigData> result = weaponPromoteExcelConfigDataMap.get(weaponPromoteId);
+        readUnlock();
+        return result;
     }
 
     public WeaponPromoteExcelConfigData getWeaponPromote(Long weaponPromoteId, Integer promoteLevel){
-        if(!weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId)){
-            return null;
+        readLock();
+        WeaponPromoteExcelConfigData result = null;
+        if(weaponPromoteExcelConfigDataMap.containsKey(weaponPromoteId)){
+            result = weaponPromoteExcelConfigDataMap.get(weaponPromoteId).get(promoteLevel);
         }
-        return weaponPromoteExcelConfigDataMap.get(weaponPromoteId).get(promoteLevel);
+        readUnlock();
+        return result;
     }
 
     public Map<Boolean, WeaponPromoteExcelConfigData> getWeaponPromoteByLevel(Long weaponPromoteId, Integer level){
+        readLock();
+        Map<Boolean, WeaponPromoteExcelConfigData> result = null;
         Map<Integer, Map<Boolean, WeaponPromoteExcelConfigData>> innerMap = weaponPromoteExcelConfigDataMapLevel.get(weaponPromoteId);
-        if(innerMap == null){
-            return null;
+        if(innerMap != null){
+            result = innerMap.get(level);
         }
-        return innerMap.get(level);
+        readUnlock();
+        return result;
     }
 
     public Map<String, Long> getName2Ids(Byte language){
+        readLock();
         Map<String, Long> name2Ids = new HashMap<>();
         nameTextMapHash2Id.forEach((hash, id) -> {
             String name = textMapFactory.getText(language, hash);
@@ -210,6 +231,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
                 name2Ids.put(String.valueOf(id), id);
             }
         });
+        readUnlock();
         return name2Ids;
     }
 

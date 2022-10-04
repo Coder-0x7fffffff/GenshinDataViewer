@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Component
 public class WeaponManager {
 
-    Logger log = LoggerFactory.getLogger(WeaponManager.class);
+    private Logger log = LoggerFactory.getLogger(WeaponManager.class);
 
     @Resource
     private TextMapFactory textMapFactory;

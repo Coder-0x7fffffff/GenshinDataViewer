@@ -40,6 +40,13 @@
                 <include>*.json</include>
             </includes>
         </fileSet>
+        <fileSet> <!-- Readable -->
+            <directory>../resources/GenshinData/Readable/</directory>
+            <outputDirectory>/resources/GenshinData/Readable/</outputDirectory>
+            <includes>
+                <include>**/*.txt</include>
+            </includes>
+        </fileSet>
         <fileSet> <!-- Main Jar -->
             <directory>../genshindataviewer-web/target/</directory>
             <outputDirectory>/</outputDirectory>

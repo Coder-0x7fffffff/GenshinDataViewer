@@ -43,7 +43,7 @@ public class Reliquary {
     private Integer maxLevel;
 
     /**
-     * 故事 TODO map storyId
+     * 故事
      */
     private String story;
 

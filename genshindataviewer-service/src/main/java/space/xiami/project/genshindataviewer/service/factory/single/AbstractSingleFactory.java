@@ -67,6 +67,9 @@ public abstract class AbstractSingleFactory<ExcelConfigData, GroupField> extends
     }
 
     public ExcelConfigData get(GroupField key){
-        return excelConfigDataMap.get(key);
+        readLock();
+        ExcelConfigData result = excelConfigDataMap.get(key);
+        readUnlock();
+        return result;
     }
 }
