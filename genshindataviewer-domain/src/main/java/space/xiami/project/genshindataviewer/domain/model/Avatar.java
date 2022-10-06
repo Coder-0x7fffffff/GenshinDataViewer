@@ -82,7 +82,8 @@ public class Avatar {
      * @see space.xiami.project.genshindataviewer.domain.json.AvatarSkillExcelConfigData
      * @see space.xiami.project.genshindataviewer.domain.json.ProudSkillExcelConfigData
      */
-    private List<List<Skill>> skillDepots;
+    private List<List<ActiveSkill>> skillDepotsActive;
+    private List<List<PassiveSkill>> skillDepotsPassive;
 
     /**
      * 命座
@@ -207,12 +208,20 @@ public class Avatar {
         isRangeAttack = rangeAttack;
     }
 
-    public List<List<Skill>> getSkillDepots() {
-        return skillDepots;
+    public List<List<ActiveSkill>> getSkillDepotsActive() {
+        return skillDepotsActive;
     }
 
-    public void setSkillDepots(List<List<Skill>> skillDepots) {
-        this.skillDepots = skillDepots;
+    public void setSkillDepotsActive(List<List<ActiveSkill>> skillDepotsActive) {
+        this.skillDepotsActive = skillDepotsActive;
+    }
+
+    public List<List<PassiveSkill>> getSkillDepotsPassive() {
+        return skillDepotsPassive;
+    }
+
+    public void setSkillDepotsPassive(List<List<PassiveSkill>> skillDepotsPassive) {
+        this.skillDepotsPassive = skillDepotsPassive;
     }
 
     public List<Talent> getTalents() {

@@ -169,38 +169,45 @@ public class AvatarManager {
         Set<Long> skillDepotIdSet = new ListOrderedSet<>();
         skillDepotIdSet.add(excelConfigData.getSkillDepotId());
         skillDepotIdSet.addAll(excelConfigData.getCandSkillDepotIds());
-        List<List<Avatar.Skill>> skillDepots = new ArrayList<>();
+        List<List<Avatar.ActiveSkill>> skillDepotsActive = new ArrayList<>();
+        List<List<Avatar.PassiveSkill>> skillDepotsPassive = new ArrayList<>();
         List<Avatar.Talent> talents = new ArrayList<>();
         skillDepotIdSet.forEach(skillDepotId -> {
             AvatarSkillDepotExcelConfigData skillDepot = avatarFactory.getAvatarSkillDepot(skillDepotId);
-            List<Avatar.Skill> skills = new ArrayList<>();
+            List<Avatar.ActiveSkill> skillsActive = new ArrayList<>();
+            List<Avatar.PassiveSkill> skillsPassive = new ArrayList<>();
             // 解析主动技能
             List<Long> activeSkillIds = new ArrayList<>(skillDepot.getSkills());
             activeSkillIds.add(skillDepot.getEnergySkill());
             activeSkillIds.forEach(skillId -> {
-                Avatar.Skill activeSkill = convertActiveSkill(lang, avatarFactory.getAvatarSkill(skillId));
+                Avatar.ActiveSkill activeSkill = convertActiveSkill(lang, avatarFactory.getAvatarSkill(skillId));
                 if(activeSkill != null){
-                    skills.add(activeSkill);
+                    skillsActive.add(activeSkill);
                 }
             });
             // 解析被动技能
             skillDepot.getInherentProudSkillOpens().forEach(inherentProudSkillOpen -> {
-                Avatar.Skill passiveSkill = convertPassiveSkill(lang, inherentProudSkillOpen);
+                Avatar.PassiveSkill passiveSkill = convertPassiveSkill(lang, inherentProudSkillOpen);
                 if(passiveSkill != null){
-                    skills.add(passiveSkill);
+                    skillsPassive.add(passiveSkill);
                 }
             });
-            skillDepots.add(skills);
+            skillDepotsActive.add(skillsActive);
+            skillDepotsPassive.add(skillsPassive);
             // 解析天赋
             List<Long> talentIds = skillDepot.getTalents();
             if(talentIds != null){
                 talentIds.forEach(talentId -> {
                     AvatarTalentExcelConfigData talent = avatarFactory.getAvatarTalent(talentId);
+                    if(talent == null){
+                        return;
+                    }
                     talents.add(convertTalent(lang, talent));
                 });
             }
         });
-        avatar.setSkillDepots(skillDepots);
+        avatar.setSkillDepotsActive(skillDepotsActive);
+        avatar.setSkillDepotsPassive(skillDepotsPassive);
         avatar.setTalents(talents);
         avatar.setStaminaRecoverSpeed(excelConfigData.getStaminaRecoverSpeed());
         // 解析进阶
