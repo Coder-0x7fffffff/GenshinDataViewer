@@ -37,7 +37,7 @@ public class ReadableFactory extends AbstractFileBaseFactory{
     @Override
     protected void load(String path) {
         try{
-            String text = new String(FileUtil.readFileOnce(path));
+            String text = new String(FileUtil.readFile(path));
             readableMap.put(convertPath(path), text);
         } catch (IOException e) {
             log.error("ReadableFactory error.", e);

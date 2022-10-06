@@ -48,7 +48,7 @@ public abstract class AbstractFileBaseFactory implements FileBaseFactory {
 
     public <T> List<T> readJsonArray(String filePath, Class<T> clazz) throws IOException {
         // 读取数据
-        String jsonString = new String(FileUtil.readFileOnce(filePath));
+        String jsonString = new String(FileUtil.readFile(filePath));
         // 对比输入对象的字段数据
         JSONArray jsonArray = JSON.parseArray(jsonString);
         Set<String> jsonFieldSet = new HashSet<>();
