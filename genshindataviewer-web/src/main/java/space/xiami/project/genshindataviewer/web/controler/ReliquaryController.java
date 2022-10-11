@@ -11,7 +11,6 @@ import space.xiami.project.genshindataviewer.domain.model.Reliquary;
 import space.xiami.project.genshindataviewer.domain.model.ReliquarySet;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,10 +23,30 @@ public class ReliquaryController {
     @Resource
     private ReliquaryService reliquaryService;
 
+    @RequestMapping("/list_set")
+    @ResponseBody
+    public ResultVO<Map<String, Long>> listSet(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
+        ResultDO<Map<String, Long>> ret = reliquaryService.getReliquarySetId(lang);
+        if(ret.isSuccess()){
+            return ResultVO.buildSuccessResult(ret.getResult());
+        }
+        return ResultVO.buildErrorResult(ret.getMsg());
+    }
+
     @RequestMapping("/list")
     @ResponseBody
-    public ResultVO<Map<String, List<Long>>> list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
-        ResultDO<Map<String, List<Long>>> ret = reliquaryService.getReliquaryIds(lang);
+    public ResultVO<Map<String, Long>> list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
+        ResultDO<Map<String, Long>> ret = reliquaryService.getReliquaryId(lang);
+        if(ret.isSuccess()){
+            return ResultVO.buildSuccessResult(ret.getResult());
+        }
+        return ResultVO.buildErrorResult(ret.getMsg());
+    }
+
+    @RequestMapping("/get_set_id")
+    @ResponseBody
+    public ResultVO<Long> getSetId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+        ResultDO<Long> ret = reliquaryService.getReliquarySetId(lang, name);
         if(ret.isSuccess()){
             return ResultVO.buildSuccessResult(ret.getResult());
         }
@@ -36,8 +55,8 @@ public class ReliquaryController {
 
     @RequestMapping("/get_id")
     @ResponseBody
-    public ResultVO<List<Long>> getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
-        ResultDO<List<Long>> ret = reliquaryService.getReliquaryId(lang, name);
+    public ResultVO<Long> getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+        ResultDO<Long> ret = reliquaryService.getReliquaryId(lang, name);
         if(ret.isSuccess()){
             return ResultVO.buildSuccessResult(ret.getResult());
         }
@@ -46,8 +65,8 @@ public class ReliquaryController {
 
     @RequestMapping("/get_by_name")
     @ResponseBody
-    public ResultVO<List<Reliquary>> getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
-        ResultDO<List<Reliquary>> ret = reliquaryService.getReliquaries(lang, name);
+    public ResultVO<Reliquary> getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+        ResultDO<Reliquary> ret = reliquaryService.getReliquary(lang, name);
         if(ret.isSuccess()){
             return ResultVO.buildSuccessResult(ret.getResult());
         }
@@ -58,6 +77,16 @@ public class ReliquaryController {
     @ResponseBody
     public ResultVO<Reliquary> getById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
         ResultDO<Reliquary> ret = reliquaryService.getReliquary(lang, id);
+        if(ret.isSuccess()){
+            return ResultVO.buildSuccessResult(ret.getResult());
+        }
+        return ResultVO.buildErrorResult(ret.getMsg());
+    }
+
+    @RequestMapping("/get_set_by_name")
+    @ResponseBody
+    public ResultVO<ReliquarySet> getSetByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+        ResultDO<ReliquarySet> ret = reliquaryService.getReliquarySet(lang, name);
         if(ret.isSuccess()){
             return ResultVO.buildSuccessResult(ret.getResult());
         }

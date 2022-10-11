@@ -440,12 +440,22 @@ public class Avatar {
 
     public static class PassiveSkill extends Skill {
 
+        private Long proudSkillId;
+
         private Long proudSkillGroupId;
 
         /**
          * 需要的人物突破等级
          */
         private Integer needAvatarPromoteLevel;
+
+        public Long getProudSkillId() {
+            return proudSkillId;
+        }
+
+        public void setProudSkillId(Long proudSkillId) {
+            this.proudSkillId = proudSkillId;
+        }
 
         public Long getProudSkillGroupId() {
             return proudSkillGroupId;

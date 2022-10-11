@@ -50,7 +50,7 @@ public class WeaponManager {
     private LocalizationFactory localizationFactory;
 
     public Map<String, Long> getWeaponIds(Byte language){
-        return weaponFactory.getName2Ids(language);
+        return weaponFactory.getName2Id(language);
     }
 
     public Long getWeaponId(Byte lang, String name){

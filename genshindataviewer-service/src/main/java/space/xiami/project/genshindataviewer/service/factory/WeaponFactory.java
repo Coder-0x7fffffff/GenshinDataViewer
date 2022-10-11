@@ -220,7 +220,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
         return result;
     }
 
-    public Map<String, Long> getName2Ids(Byte language){
+    public Map<String, Long> getName2Id(Byte language){
         readLock();
         Map<String, Long> name2Ids = new HashMap<>();
         nameTextMapHash2Id.forEach((hash, id) -> {
@@ -236,7 +236,7 @@ public class WeaponFactory extends AbstractFileBaseFactory {
     }
 
     public Long getIdByName(Byte language, String name){
-        Map<String, Long> name2ids = getName2Ids(language);
-        return name2ids.get(name);
+        Map<String, Long> name2id = getName2Id(language);
+        return name2id.get(name);
     }
 }

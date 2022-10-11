@@ -14,6 +14,11 @@ public class ReliquarySet {
     private Long setId;
 
     /**
+     * 可用的圣遗物
+     */
+    private List<Reliquary> reliquaries;
+
+    /**
      * 圣遗物套装效果 count(setNeedNum) -> EquipAffix(EquipAffixId)
      */
     private Map<Integer, EquipAffix> groupEquipAffix;
@@ -24,6 +29,14 @@ public class ReliquarySet {
 
     public void setSetId(Long setId) {
         this.setId = setId;
+    }
+
+    public List<Reliquary> getReliquaries() {
+        return reliquaries;
+    }
+
+    public void setReliquaries(List<Reliquary> reliquaries) {
+        this.reliquaries = reliquaries;
     }
 
     public Map<Integer, EquipAffix> getGroupEquipAffix() {

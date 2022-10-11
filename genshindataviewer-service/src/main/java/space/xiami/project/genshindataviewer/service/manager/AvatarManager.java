@@ -294,6 +294,11 @@ public class AvatarManager {
             }else{
                 log.warn("Multi desc for PassiveSkill, groupId={}", proudSkillExcelConfigData.getProudSkillGroupId());
             }
+            if(avatarPassiveSkill.getProudSkillId() != null){
+                avatarPassiveSkill.setProudSkillId(proudSkillExcelConfigData.getProudSkillId());
+            }else{
+                log.warn("Multi id for PassiveSkill, groupId={}", proudSkillExcelConfigData.getProudSkillGroupId());
+            }
         });
         avatarPassiveSkill.setProudSkillGroupId(inherentProudSkillOpen.getProudSkillGroupId());
         avatarPassiveSkill.setNeedAvatarPromoteLevel(inherentProudSkillOpen.getNeedAvatarPromoteLevel());

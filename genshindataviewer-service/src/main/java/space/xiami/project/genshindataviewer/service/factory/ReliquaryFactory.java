@@ -34,6 +34,9 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
     @Resource
     private TextMapFactory textMapFactory;
 
+    @Resource
+    private EquipAffixFactory equipAffixFactory;
+
     /**
      * setId -> DO
      */
@@ -45,9 +48,14 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
     private final Map<Long, ReliquaryExcelConfigData> reliquaryExcelConfigDataMap = new HashMap<>();
 
     /**
-     * nameTextHash -> Id
+     * nameTextHash -> id
      */
-    private final Map<Long, List<Long>> nameTextMapHash2Ids = new HashMap<>();
+    private final Map<Long, Long> nameTextMapHash2Id = new HashMap<>();
+
+    /**
+     * EquipAffix-nameTextHash -> setId
+     */
+    private final Map<Long, Long> nameTextMapHash2SetId = new HashMap<>();
 
     @Override
     protected void load(String path) {
@@ -56,7 +64,7 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
                 List<ReliquarySetExcelConfigData> array = readJsonArray(path, ReliquarySetExcelConfigData.class);
                 for(ReliquarySetExcelConfigData data : array){
                     if(reliquarySetExcelConfigDataMap.containsKey(data.getSetId())){
-                        log.warn("Ignore same reliquarySetExcelConfigData weaponId={}", data.getSetId());
+                        log.warn("Ignore same reliquarySetExcelConfigData id={}", data.getSetId());
                         continue;
                     }
                     reliquarySetExcelConfigDataMap.put(data.getSetId(), data);
@@ -65,11 +73,10 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
                 List<ReliquaryExcelConfigData> array = readJsonArray(path, ReliquaryExcelConfigData.class);
                 for(ReliquaryExcelConfigData data : array){
                     if(reliquaryExcelConfigDataMap.containsKey(data.getId())){
-                        log.warn("Ignore same reliquarySetExcelConfigData weaponId={}", data.getId());
+                        log.warn("Ignore same reliquarySetExcelConfigData id={}", data.getId());
                         continue;
                     }
                     reliquaryExcelConfigDataMap.put(data.getId(), data);
-                    nameTextMapHash2Ids.computeIfAbsent(data.getNameTextMapHash(), v -> new ArrayList<>()).add(data.getId());
                 }
             }
         } catch (IOException e) {
@@ -81,9 +88,11 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
     protected void clear(String path) {
         if(path.endsWith(SPLASH + reliquarySetExcelConfigDataFile)){
             reliquarySetExcelConfigDataMap.clear();
+            nameTextMapHash2SetId.clear();
+            nameTextMapHash2Id.clear();
         }else if(path.endsWith(SPLASH + reliquaryExcelConfigDataFile)){
             reliquaryExcelConfigDataMap.clear();
-            nameTextMapHash2Ids.clear();
+            nameTextMapHash2Id.clear();
         }
     }
 
@@ -106,24 +115,72 @@ public class ReliquaryFactory extends AbstractFileBaseFactory{
         return result;
     }
 
-
-    public Map<String, List<Long>> getName2Ids(Byte language){
+    public Map<String, Long> getName2Id(Byte language){
         readLock();
-        Map<String, List<Long>> name2Ids = new HashMap<>();
-        nameTextMapHash2Ids.forEach((hash, ids) -> {
+        Map<String, Long> name2Id = new HashMap<>();
+        if(nameTextMapHash2Id.isEmpty()){
+            // lazy init
+            reliquarySetExcelConfigDataMap.values().forEach(reliquarySetExcelConfigData -> {
+                reliquarySetExcelConfigData.getContainsList().forEach(id -> {
+                    Long nameTextHash = getReliquary(id).getNameTextMapHash();
+                    if(nameTextMapHash2Id.containsKey(nameTextHash)){
+                        log.warn("Same nameTextMapHash: {}", nameTextHash);
+                        return;
+                    }
+                    nameTextMapHash2Id.put(nameTextHash, id);
+                });
+            });
+            // 补充套装之外的圣遗物
+            reliquaryExcelConfigDataMap.values().forEach(reliquaryExcelConfigData -> {
+                if(reliquaryExcelConfigData.getSetId() == null){
+                    nameTextMapHash2Id.put(reliquaryExcelConfigData.getNameTextMapHash(), reliquaryExcelConfigData.getId());
+                }
+            });
+        }
+        nameTextMapHash2Id.forEach((hash, id) -> {
             String name = textMapFactory.getText(language, hash);
-            if(StringUtils.hasLength(name)){
-                name2Ids.computeIfAbsent(name, v -> new ArrayList<>()).addAll(ids);
-            }else{
-                name2Ids.put(String.valueOf(hash), ids);
-            }
+            name2Id.put(name != null ? name : String.valueOf(id), id);
         });
         readUnlock();
-        return name2Ids;
+        return name2Id;
     }
 
-    public List<Long> getIdByName(Byte language, String name){
-        Map<String, List<Long>> name2ids = getName2Ids(language);
-        return name2ids.get(name);
+    public Long getIdByName(Byte language, String name){
+        return getName2Id(language).get(name);
+    }
+
+    public Map<String, Long> getName2SetId(Byte language){
+        readLock();
+        Map<String, Long> name2id = new HashMap<>();
+        if(nameTextMapHash2SetId.isEmpty()){
+            // lazy init
+            reliquarySetExcelConfigDataMap.values().forEach(data -> {
+                if(data.getEquipAffixId() == null){
+                    return;
+                }
+                equipAffixFactory.getById(data.getEquipAffixId()).values().forEach(equipAffixExcelConfigData -> {
+                    Long hash = equipAffixExcelConfigData.getNameTextMapHash();
+                    if(nameTextMapHash2SetId.containsKey(hash)){
+                        log.warn("Ignore same nameTextMapHash2SetId hash={}", hash);
+                        return;
+                    }
+                    nameTextMapHash2SetId.put(hash, data.getSetId());
+                });
+            });
+        }
+        nameTextMapHash2SetId.forEach((hash, setId) -> {
+            String name = textMapFactory.getText(language, hash);
+            if(name2id.containsKey(name) && !name2id.get(name).equals(setId)){
+                log.warn("Same reliquarySet name with different setId, name={}", name);
+                return;
+            }
+            name2id.put(name, setId);
+        });
+        readUnlock();
+        return name2id;
+    }
+
+    public Long getSetIdByName(Byte language, String name){
+        return getName2SetId(language).get(name);
     }
 }
