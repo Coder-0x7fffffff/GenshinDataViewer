@@ -3,7 +3,7 @@ package space.xiami.project.genshindataviewer.service.manager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.CurveEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshindataviewer.service.factory.*;
@@ -17,10 +17,13 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Xiami
+ */
 @Component
 public class WeaponManager {
 
-    Logger log = LoggerFactory.getLogger(WeaponManager.class);
+    private Logger log = LoggerFactory.getLogger(WeaponManager.class);
 
     @Resource
     private TextMapFactory textMapFactory;
@@ -47,7 +50,7 @@ public class WeaponManager {
     private LocalizationFactory localizationFactory;
 
     public Map<String, Long> getWeaponIds(Byte language){
-        return weaponFactory.getName2Ids(language);
+        return weaponFactory.getName2Id(language);
     }
 
     public Long getWeaponId(Byte lang, String name){
@@ -80,14 +83,14 @@ public class WeaponManager {
         return convertInfo(lang, excelConfigData);
     }
 
-    public WeaponInfo convertInfo(Byte lang, WeaponExcelConfigData excelConfigData){
+    private WeaponInfo convertInfo(Byte lang, WeaponExcelConfigData excelConfigData){
         WeaponInfo weaponInfo = new WeaponInfo();
         weaponInfo.setId(excelConfigData.getId());
         weaponInfo.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));
         return weaponInfo;
     }
 
-    public Weapon convert(Byte lang, WeaponExcelConfigData excelConfigData){
+    private Weapon convert(Byte lang, WeaponExcelConfigData excelConfigData){
         Weapon weapon = new Weapon();
         weapon.setId(excelConfigData.getId());
         weapon.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));

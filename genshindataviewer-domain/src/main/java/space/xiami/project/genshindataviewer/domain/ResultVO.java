@@ -1,9 +1,9 @@
 package space.xiami.project.genshindataviewer.domain;
 
-public class ResultVO {
+public class ResultVO<T> {
 
     private Integer status;
-    private Object modal;
+    private T modal;
     private String error;
 
     public Integer getStatus() {
@@ -14,11 +14,11 @@ public class ResultVO {
         this.status = status;
     }
 
-    public Object getModal() {
+    public T getModal() {
         return modal;
     }
 
-    public void setModal(Object modal) {
+    public void setModal(T modal) {
         this.modal = modal;
     }
 
@@ -30,15 +30,15 @@ public class ResultVO {
         this.error = error;
     }
 
-    public static ResultVO buildSuccessResult(Object modal){
-        ResultVO result = new ResultVO();
+    public static <R> ResultVO<R> buildSuccessResult(R modal){
+        ResultVO<R> result = new ResultVO<R>();
         result.setStatus(200);
         result.setModal(modal);
         return result;
     }
 
-    public static ResultVO buildErrorResult(String error){
-        ResultVO result = new ResultVO();
+    public static <R> ResultVO<R> buildErrorResult(String error){
+        ResultVO<R> result = new ResultVO<R>();
         result.setStatus(200);
         result.setError(error);
         return result;

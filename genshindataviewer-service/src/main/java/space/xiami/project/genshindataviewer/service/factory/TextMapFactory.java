@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.common.enums.LanguageEnum;
+import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.service.util.PathUtil;
 
 import java.io.*;
@@ -105,14 +105,16 @@ public class TextMapFactory extends AbstractFileBaseFactory {
         if(hash == null || language == null){
             return null;
         }
+        readLock();
+        String text = null;
         if(language2TextMap.containsKey(language)){
-            String text = language2TextMap.get(language).getText(hash);
+            text = language2TextMap.get(language).getText(hash);
             if(text != null && params != null){
                 text = replaceParam(text, params);
             }
-            return text;
         }
-        return null;
+        readUnlock();
+        return text;
     }
 
     public static String replaceParam(String text, List<Double> params){

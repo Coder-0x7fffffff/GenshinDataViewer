@@ -10,11 +10,17 @@ import space.xiami.project.genshindataviewer.service.util.FileUtil;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+/**
+ * @author Xiami
+ */
 public abstract class AbstractFileBaseFactory implements FileBaseFactory {
 
     private final Logger log = LoggerFactory.getLogger(AbstractFileBaseFactory.class);
+
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     protected static final String SPLASH = "/";
 
@@ -22,17 +28,27 @@ public abstract class AbstractFileBaseFactory implements FileBaseFactory {
 
     protected abstract void clear(String path);
 
+    public void readLock(){
+        lock.readLock().lock();
+    }
+
+    public void readUnlock(){
+        lock.readLock().unlock();
+    }
+
     @Override
     public void reload(String path){
         if(relatedFilePathSet().contains(path)){
+            lock.writeLock().lock();
             clear(path);
             load(path);
+            lock.writeLock().unlock();
         }
     }
 
     public <T> List<T> readJsonArray(String filePath, Class<T> clazz) throws IOException {
         // 读取数据
-        String jsonString = new String(FileUtil.readFileOnce(filePath));
+        String jsonString = new String(FileUtil.readFile(filePath));
         // 对比输入对象的字段数据
         JSONArray jsonArray = JSON.parseArray(jsonString);
         Set<String> jsonFieldSet = new HashSet<>();

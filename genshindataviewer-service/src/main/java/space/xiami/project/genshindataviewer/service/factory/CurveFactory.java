@@ -3,7 +3,7 @@ package space.xiami.project.genshindataviewer.service.factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.CurveEnum;
 import space.xiami.project.genshindataviewer.domain.json.CurveExcelConfigData;
 import space.xiami.project.genshindataviewer.service.util.PathUtil;
 
@@ -92,14 +92,19 @@ public class CurveFactory extends AbstractFileBaseFactory{
     }
 
     public Map<String, CurveExcelConfigData.CurveInfo> getCurveInfoMap(Byte curveType, Integer level){
-        if(!curveInfoMap.containsKey(curveType)){
-            return null;
+        readLock();
+        Map<String, CurveExcelConfigData.CurveInfo> result = null;
+        if(curveInfoMap.containsKey(curveType)){
+            result = curveInfoMap.get(curveType).get(level);
         }
-        return curveInfoMap.get(curveType).get(level);
+        readUnlock();
+        return result;
     }
 
     public CurveExcelConfigData.CurveInfo getCurveInfo(Byte curveType, Integer level, String type){
+        readLock();
         Map<String, CurveExcelConfigData.CurveInfo> curveMap = getCurveInfoMap(curveType, level);
+        readUnlock();
         if(curveMap == null){
             return null;
         }

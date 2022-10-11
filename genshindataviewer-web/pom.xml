@@ -33,6 +33,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.7.3</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
@@ -47,6 +48,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.3</version>
                 <configuration>
+                    <finalName>genshindataviewer</finalName>
                     <mainClass>space.xiami.project.genshindataviewer.web.Application</mainClass>
                 </configuration>
                 <executions>

@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import space.xiami.project.genshindataviewer.common.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.CurveEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
-import space.xiami.project.genshindataviewer.service.factory.*;
+import space.xiami.project.genshindataviewer.service.factory.AvatarFactory;
+import space.xiami.project.genshindataviewer.service.factory.CurveFactory;
+import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.MaterialFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.RewardFactory;
@@ -72,8 +74,8 @@ public class AvatarManager {
         }
         return convert(lang, excelConfigData);
     }
-    
-    public Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData){
+
+    private Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData){
         Avatar avatar = new Avatar();
         avatar.setId(excelConfigData.getId());
         avatar.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));
@@ -166,38 +168,47 @@ public class AvatarManager {
         Set<Long> skillDepotIdSet = new ListOrderedSet<>();
         skillDepotIdSet.add(excelConfigData.getSkillDepotId());
         skillDepotIdSet.addAll(excelConfigData.getCandSkillDepotIds());
-        List<List<Avatar.Skill>> skillDepots = new ArrayList<>();
-        List<Avatar.Talent> talents = new ArrayList<>();
+        Map<Long, List<Avatar.ActiveSkill>> skillActive = new HashMap<>();
+        Map<Long, List<Avatar.PassiveSkill>> skillPassive = new HashMap<>();
+        Map<Long, List<Avatar.Talent>> talents = new HashMap<>();
         skillDepotIdSet.forEach(skillDepotId -> {
             AvatarSkillDepotExcelConfigData skillDepot = avatarFactory.getAvatarSkillDepot(skillDepotId);
-            List<Avatar.Skill> skills = new ArrayList<>();
+            List<Avatar.ActiveSkill> skillsActive = new ArrayList<>();
+            List<Avatar.PassiveSkill> skillsPassive = new ArrayList<>();
+            List<Avatar.Talent> talentList = new ArrayList<>();
             // 解析主动技能
             List<Long> activeSkillIds = new ArrayList<>(skillDepot.getSkills());
             activeSkillIds.add(skillDepot.getEnergySkill());
             activeSkillIds.forEach(skillId -> {
-                Avatar.Skill activeSkill = convertActiveSkill(lang, avatarFactory.getAvatarSkill(skillId));
+                Avatar.ActiveSkill activeSkill = convertActiveSkill(lang, avatarFactory.getAvatarSkill(skillId));
                 if(activeSkill != null){
-                    skills.add(activeSkill);
+                    skillsActive.add(activeSkill);
                 }
             });
             // 解析被动技能
             skillDepot.getInherentProudSkillOpens().forEach(inherentProudSkillOpen -> {
-                Avatar.Skill passiveSkill = convertPassiveSkill(lang, inherentProudSkillOpen);
+                Avatar.PassiveSkill passiveSkill = convertPassiveSkill(lang, inherentProudSkillOpen);
                 if(passiveSkill != null){
-                    skills.add(passiveSkill);
+                    skillsPassive.add(passiveSkill);
                 }
             });
-            skillDepots.add(skills);
             // 解析天赋
             List<Long> talentIds = skillDepot.getTalents();
             if(talentIds != null){
                 talentIds.forEach(talentId -> {
                     AvatarTalentExcelConfigData talent = avatarFactory.getAvatarTalent(talentId);
-                    talents.add(convertTalent(lang, talent));
+                    if(talent == null){
+                        return;
+                    }
+                    talentList.add(convertTalent(lang, talent));
                 });
             }
+            skillActive.put(skillDepotId, skillsActive);
+            skillPassive.put(skillDepotId, skillsPassive);
+            talents.put(skillDepotId, talentList);
         });
-        avatar.setSkillDepots(skillDepots);
+        avatar.setSkillActive(skillActive);
+        avatar.setSkillPassive(skillPassive);
         avatar.setTalents(talents);
         avatar.setStaminaRecoverSpeed(excelConfigData.getStaminaRecoverSpeed());
         // 解析进阶
@@ -269,7 +280,7 @@ public class AvatarManager {
             return null;
         }
         Avatar.PassiveSkill avatarPassiveSkill = new Avatar.PassiveSkill();
-        //名称设计不合理，只能从技能中拿到名字，只有在一个等级的时候是合理的
+        //TODO 名称设计不合理，只能从技能中拿到名字，只有在一个等级的时候是合理的
         proudSkillExcelConfigDataMap.forEach((level, proudSkillExcelConfigData) -> {
             Long nameHash = proudSkillExcelConfigData.getNameTextMapHash();
             Long descHash = proudSkillExcelConfigData.getDescTextMapHash();
@@ -283,7 +294,13 @@ public class AvatarManager {
             }else{
                 log.warn("Multi desc for PassiveSkill, groupId={}", proudSkillExcelConfigData.getProudSkillGroupId());
             }
+            if(avatarPassiveSkill.getProudSkillId() != null){
+                avatarPassiveSkill.setProudSkillId(proudSkillExcelConfigData.getProudSkillId());
+            }else{
+                log.warn("Multi id for PassiveSkill, groupId={}", proudSkillExcelConfigData.getProudSkillGroupId());
+            }
         });
+        avatarPassiveSkill.setProudSkillGroupId(inherentProudSkillOpen.getProudSkillGroupId());
         avatarPassiveSkill.setNeedAvatarPromoteLevel(inherentProudSkillOpen.getNeedAvatarPromoteLevel());
         avatarPassiveSkill.setSkillProperties(convertSkillProperties(lang, proudSkillExcelConfigDataMap));
         return avatarPassiveSkill;

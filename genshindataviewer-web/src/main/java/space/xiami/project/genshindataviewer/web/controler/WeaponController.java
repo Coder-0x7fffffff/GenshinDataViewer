@@ -24,40 +24,40 @@ public class WeaponController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public ResultVO list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
+    public ResultVO<Map<String, Long>> list(@RequestParam(name = "lang", defaultValue = "0") Byte lang){
         ResultDO<Map<String, Long>> ret = weaponService.getWeaponIds(lang);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_id")
     @ResponseBody
-    public ResultVO getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+    public ResultVO<Long> getId(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
         ResultDO<Long> ret = weaponService.getWeaponId(lang, name);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_by_name")
     @ResponseBody
-    public ResultVO getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
+    public ResultVO<Weapon> getByName(@RequestParam(name = "lang", defaultValue = "0") Byte lang, String name){
         ResultDO<Weapon> ret = weaponService.getWeapon(lang, name);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }
 
     @RequestMapping("/get_by_id")
     @ResponseBody
-    public ResultVO getById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
+    public ResultVO<Weapon> getById(@RequestParam(name = "lang", defaultValue = "0") Byte lang, Long id){
         ResultDO<Weapon> ret = weaponService.getWeapon(lang, id);
         if(ret.isSuccess()){
-            return ResultVO.buildSuccessResult(ret);
+            return ResultVO.buildSuccessResult(ret.getResult());
         }
         return ResultVO.buildErrorResult(ret.getMsg());
     }

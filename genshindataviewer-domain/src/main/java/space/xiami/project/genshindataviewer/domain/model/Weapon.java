@@ -48,10 +48,9 @@ public class Weapon {
      */
     private List<WeaponPromoteCost> weaponPromoteCosts;
     /**
-     * 武器故事 TODO storyId映射到DocumentExcelConfigData 再通过contentLocallizedId映射到LocalizationExcelCOnfigData ......
+     * 武器故事
      */
     private String story;
-    // story; GFCNPCMMGHC; gachaCardNameHashPre; destroyRule; destroyReturnMaterial; destroyReturnMaterialCount; initialLockState; awakenTexture; awakenLightMapTexture; awakenIcon; weight; rank; gadgetId; icon;
 
     public Long getId() {
         return id;

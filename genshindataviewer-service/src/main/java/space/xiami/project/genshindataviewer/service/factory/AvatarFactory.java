@@ -2,7 +2,6 @@ package space.xiami.project.genshindataviewer.service.factory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import space.xiami.project.genshindataviewer.domain.json.*;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * @author Xiami
  */
 @Component
-public class AvatarFactory extends AbstractFileBaseFactory{
+public class AvatarFactory extends AbstractFileBaseFactory {
     
     public static final Logger log = LoggerFactory.getLogger(AvatarFactory.class);
 
@@ -224,32 +223,48 @@ public class AvatarFactory extends AbstractFileBaseFactory{
 
 
     public AvatarExcelConfigData getAvatar(Long id){
-        return avatarExcelConfigDataMap.get(id);
+        readLock();
+        AvatarExcelConfigData result = avatarExcelConfigDataMap.get(id);
+        readUnlock();
+        return result;
     }
 
     public AvatarLevelExcelConfigData getAvatarLevel(Integer level){
-        return avatarLevelExcelConfigDataMap.get(level);
+        readLock();
+        AvatarLevelExcelConfigData result = avatarLevelExcelConfigDataMap.get(level);
+        readUnlock();
+        return result;
     }
 
     public List<Integer> getSortedLevel(){
+        readLock();
         ArrayList<Integer> levelList = new ArrayList<>(avatarLevelExcelConfigDataMap.keySet());
+        readUnlock();
         levelList.sort(Comparator.comparingInt(o -> o));
         return levelList;
     }
 
     public Map<Integer ,AvatarPromoteExcelConfigData> getAvatarPromoteMap(Long avatarPromoteId){
-        return avatarPromoteExcelConfigDataMap.get(avatarPromoteId);
+        readLock();
+        Map<Integer, AvatarPromoteExcelConfigData> result = avatarPromoteExcelConfigDataMap.get(avatarPromoteId);
+        readUnlock();
+        return result;
     }
 
     public AvatarPromoteExcelConfigData getAvatarPromote(Long avatarPromoteId, Integer promoteLevel){
-        if(!avatarPromoteExcelConfigDataMap.containsKey(avatarPromoteId)){
-            return null;
+        readLock();
+        AvatarPromoteExcelConfigData result = null;
+        if(avatarPromoteExcelConfigDataMap.containsKey(avatarPromoteId)){
+            result = avatarPromoteExcelConfigDataMap.get(avatarPromoteId).get(promoteLevel);
         }
-        return avatarPromoteExcelConfigDataMap.get(avatarPromoteId).get(promoteLevel);
+        readUnlock();
+        return result;
     }
 
     public Map<Boolean, AvatarPromoteExcelConfigData> getAvatarPromoteByLevel(Long avatarPromoteId, Integer level){
+        readLock();
         Map<Integer, Map<Boolean, AvatarPromoteExcelConfigData>> innerMap = avatarPromoteExcelConfigDataMapLevel.get(avatarPromoteId);
+        readUnlock();
         if(innerMap == null){
             return null;
         }
@@ -257,19 +272,30 @@ public class AvatarFactory extends AbstractFileBaseFactory{
     }
 
     public AvatarSkillDepotExcelConfigData getAvatarSkillDepot(Long id){
-        return avatarSkillDepotExcelConfigDataMap.get(id);
+        readLock();
+        AvatarSkillDepotExcelConfigData result = avatarSkillDepotExcelConfigDataMap.get(id);
+        readUnlock();
+        return result;
     }
 
     public AvatarSkillExcelConfigData getAvatarSkill(Long id){
-        return avatarSkillExcelConfigDataMap.get(id);
+        readLock();
+        AvatarSkillExcelConfigData result = avatarSkillExcelConfigDataMap.get(id);
+        readUnlock();
+        return result;
     }
 
     public Map<Integer, ProudSkillExcelConfigData> getProudSkillLevelMap(Long proudSkillGroupId){
-        return proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
+        readLock();
+        Map<Integer, ProudSkillExcelConfigData> result = proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
+        readUnlock();
+        return result;
     }
 
     public ProudSkillExcelConfigData getProudSkillByLevel(Long proudSkillGroupId, Integer level){
+        readLock();
         Map<Integer, ProudSkillExcelConfigData> innerMap = proudSkillExcelConfigDataMapLevel.get(proudSkillGroupId);
+        readUnlock();
         if(innerMap == null){
             return null;
         }
@@ -277,11 +303,14 @@ public class AvatarFactory extends AbstractFileBaseFactory{
     }
 
     public AvatarTalentExcelConfigData getAvatarTalent(Long talentId){
-        return avatarTalentExcelConfigDataMap.get(talentId);
+        readLock();
+        AvatarTalentExcelConfigData result = avatarTalentExcelConfigDataMap.get(talentId);
+        readUnlock();
+        return result;
     }
 
-    @Cacheable(cacheNames = "AvatarFactory_name2Ids", unless = "#result.size() == 0")
     public Map<String, Long> getName2Ids(Byte language){
+        readLock();
         Map<String, Long> name2Ids = new HashMap<>();
         nameTextMapHash2Id.forEach((hash, id) -> {
             String name = textMapFactory.getText(language, hash);
@@ -291,6 +320,7 @@ public class AvatarFactory extends AbstractFileBaseFactory{
                 name2Ids.put(String.valueOf(id), id);
             }
         });
+        readUnlock();
         return name2Ids;
     }
 

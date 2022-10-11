@@ -12,13 +12,19 @@ import java.util.Map;
  */
 public interface ReliquaryService {
 
-    ResultDO<Map<String, List<Long>>> getReliquaryIds(Byte lang);
+    ResultDO<Map<String, Long>> getReliquarySetId(Byte lang);
 
-    ResultDO<List<Long>> getReliquaryId(Byte lang, String name);
+    ResultDO<Long> getReliquarySetId(Byte lang, String name);
 
-    ResultDO<List<Reliquary>> getReliquaries(Byte lang, String name);
+    ResultDO<Map<String, Long>> getReliquaryId(Byte lang);
+
+    ResultDO<Long> getReliquaryId(Byte lang, String name);
+
+    ResultDO<Reliquary> getReliquary(Byte lang, String name);
 
     ResultDO<Reliquary> getReliquary(Byte lang, Long id);
+
+    ResultDO<ReliquarySet> getReliquarySet(Byte lang, String name);
 
     ResultDO<ReliquarySet> getReliquarySet(Byte lang, Long id);
 }

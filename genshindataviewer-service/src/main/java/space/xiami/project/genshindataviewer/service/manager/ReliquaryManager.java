@@ -16,6 +16,7 @@ import space.xiami.project.genshindataviewer.service.factory.single.Localization
 import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,14 +46,29 @@ public class ReliquaryManager {
     private EquipAffixManager equipAffixManager;
 
 
-    public Map<String, List<Long>> getReliquaryIdsMap(Byte language){
-        return reliquaryFactory.getName2Ids(language);
+    public Map<String, Long> getReliquarySetIdMap(Byte language){
+        return reliquaryFactory.getName2SetId(language);
     }
 
-    public List<Long> getReliquaryIds(Byte lang, String name){
+    public Long getReliquarySetId(Byte lang, String name){
+        return reliquaryFactory.getSetIdByName(lang, name);
+    }
+
+    public Map<String, Long> getReliquaryIdMap(Byte language){
+        return reliquaryFactory.getName2Id(language);
+    }
+
+    public Long getReliquaryId(Byte lang, String name){
         return reliquaryFactory.getIdByName(lang, name);
     }
 
+    public ReliquarySet getReliquarySet(Byte lang, String name){
+        Long id = getReliquarySetId(lang, name);
+        if(id == null){
+            return null;
+        }
+        return getReliquarySet(lang, id);
+    }
 
     public ReliquarySet getReliquarySet(Byte lang, Long setId){
         ReliquarySetExcelConfigData excelConfigData = reliquaryFactory.getReliquarySet(setId);
@@ -61,6 +77,7 @@ public class ReliquaryManager {
         }
         ReliquarySet reliquarySet = new ReliquarySet();
         reliquarySet.setSetId(excelConfigData.getSetId());
+        reliquarySet.setReliquaries(excelConfigData.getContainsList().stream().map(id -> getReliquary(lang, id)).collect(Collectors.toList()));
         // groupEquipAffix
         Long equipAffixId = excelConfigData.getEquipAffixId();
         List<Integer> needNumList = excelConfigData.getSetNeedNum();
@@ -77,12 +94,12 @@ public class ReliquaryManager {
         return reliquarySet;
     }
 
-    public List<Reliquary> getReliquaries(Byte lang, String name){
-        List<Long> ids = getReliquaryIds(lang, name);
-        if(CollectionUtils.isEmpty(ids)){
+    public Reliquary getReliquary(Byte lang, String name){
+        Long id = getReliquaryId(lang, name);
+        if(id == null){
             return null;
         }
-        return ids.stream().map(id -> getReliquary(lang, id)).collect(Collectors.toList());
+        return getReliquary(lang, id);
     }
     
     public Reliquary getReliquary(Byte lang, Long id){
@@ -99,9 +116,6 @@ public class ReliquaryManager {
                     .map(level -> level - 1)
                     .collect(Collectors.toList())
             );
-        }
-        if(excelConfigData.getMaxLevel() != null && excelConfigData.getMaxLevel() > 1){
-            reliquary.setMaxLevel(excelConfigData.getMaxLevel() - 1);
         }
         DocumentExcelConfigData document = documentFactory.get(excelConfigData.getStoryId());
         if(document != null){

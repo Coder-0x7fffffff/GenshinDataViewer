@@ -38,12 +38,7 @@ public class Reliquary {
     private List<Integer> addPropLevels;
 
     /**
-     * 最大等级
-     */
-    private Integer maxLevel;
-
-    /**
-     * 故事 TODO map storyId
+     * 故事
      */
     private String story;
 
@@ -93,14 +88,6 @@ public class Reliquary {
 
     public void setAddPropLevels(List<Integer> addPropLevels) {
         this.addPropLevels = addPropLevels;
-    }
-
-    public Integer getMaxLevel() {
-        return maxLevel;
-    }
-
-    public void setMaxLevel(Integer maxLevel) {
-        this.maxLevel = maxLevel;
     }
 
     public String getStory() {

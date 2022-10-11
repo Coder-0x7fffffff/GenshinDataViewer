@@ -82,7 +82,8 @@ public class Avatar {
      * @see space.xiami.project.genshindataviewer.domain.json.AvatarSkillExcelConfigData
      * @see space.xiami.project.genshindataviewer.domain.json.ProudSkillExcelConfigData
      */
-    private List<List<Skill>> skillDepots;
+    private Map<Long, List<ActiveSkill>> skillActive;
+    private Map<Long, List<PassiveSkill>> skillPassive;
 
     /**
      * 命座
@@ -91,7 +92,7 @@ public class Avatar {
      * @see space.xiami.project.genshindataviewer.domain.json.AvatarSkillDepotExcelConfigData
      * @see space.xiami.project.genshindataviewer.domain.json.AvatarTalentExcelConfigData
      */
-    private List<Talent> talents;
+    private Map<Long, List<Talent>> talents;
 
     /**
      * 体力回复速度
@@ -207,19 +208,27 @@ public class Avatar {
         isRangeAttack = rangeAttack;
     }
 
-    public List<List<Skill>> getSkillDepots() {
-        return skillDepots;
+    public Map<Long, List<ActiveSkill>> getSkillActive() {
+        return skillActive;
     }
 
-    public void setSkillDepots(List<List<Skill>> skillDepots) {
-        this.skillDepots = skillDepots;
+    public void setSkillActive(Map<Long, List<ActiveSkill>> skillActive) {
+        this.skillActive = skillActive;
     }
 
-    public List<Talent> getTalents() {
+    public Map<Long, List<PassiveSkill>> getSkillPassive() {
+        return skillPassive;
+    }
+
+    public void setSkillPassive(Map<Long, List<PassiveSkill>> skillPassive) {
+        this.skillPassive = skillPassive;
+    }
+
+    public Map<Long, List<Talent>> getTalents() {
         return talents;
     }
 
-    public void setTalents(List<Talent> talents) {
+    public void setTalents(Map<Long, List<Talent>> talents) {
         this.talents = talents;
     }
 
@@ -239,7 +248,7 @@ public class Avatar {
         this.avatarPromotes = avatarPromotes;
     }
 
-    public static abstract  class Skill{
+    public static abstract class Skill{
 
         /**
          * 技能名称
@@ -430,10 +439,31 @@ public class Avatar {
     }
 
     public static class PassiveSkill extends Skill {
+
+        private Long proudSkillId;
+
+        private Long proudSkillGroupId;
+
         /**
          * 需要的人物突破等级
          */
         private Integer needAvatarPromoteLevel;
+
+        public Long getProudSkillId() {
+            return proudSkillId;
+        }
+
+        public void setProudSkillId(Long proudSkillId) {
+            this.proudSkillId = proudSkillId;
+        }
+
+        public Long getProudSkillGroupId() {
+            return proudSkillGroupId;
+        }
+
+        public void setProudSkillGroupId(Long proudSkillGroupId) {
+            this.proudSkillGroupId = proudSkillGroupId;
+        }
 
         public Integer getNeedAvatarPromoteLevel() {
             return needAvatarPromoteLevel;
@@ -444,7 +474,7 @@ public class Avatar {
         }
     }
 
-    public static class Talent{
+    public static class Talent {
 
         /**
          * 命座id

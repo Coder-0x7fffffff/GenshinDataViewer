@@ -1,0 +1,69 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 https://maven.apache.org/xsd/assembly-2.1.1.xsd">
+    <id>assembly-make</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <fileSets>
+        <fileSet> <!-- ExcelBinOutput -->
+            <directory>../resources/GenshinData/ExcelBinOutput/</directory>
+            <outputDirectory>/resources/GenshinData/ExcelBinOutput/</outputDirectory>
+            <includes>
+                <include>AvatarCurveExcelConfigData.json</include>
+                <include>AvatarExcelConfigData.json</include>
+                <include>AvatarLevelExcelConfigData.json</include>
+                <include>AvatarPromoteExcelConfigData.json</include>
+                <include>AvatarSkillDepotExcelConfigData.json</include>
+                <include>AvatarSkillExcelConfigData.json</include>
+                <include>AvatarTalentExcelConfigData.json</include>
+                <include>DocumentExcelConfigData.json</include>
+                <include>EquipAffixExcelConfigData.json</include>
+                <include>LocalizationExcelConfigData.json</include>
+                <include>ManualTextMapConfigData.json</include>
+                <include>MaterialExcelConfigData.json</include>
+                <include>ProudSkillExcelConfigData.json</include>
+                <include>ReliquaryExcelConfigData.json</include>
+                <include>ReliquarySetExcelConfigData.json</include>
+                <include>RewardExcelConfigData.json</include>
+                <include>WeaponCodexExcelConfigData.json</include>
+                <include>WeaponCurveExcelConfigData.json</include>
+                <include>WeaponExcelConfigData.json</include>
+                <include>WeaponLevelExcelConfigData.json</include>
+                <include>WeaponPromoteExcelConfigData.json</include>
+            </includes>
+        </fileSet>
+        <fileSet> <!-- TextMap -->
+            <directory>../resources/GenshinData/TextMap/</directory>
+            <outputDirectory>/resources/GenshinData/TextMap/</outputDirectory>
+            <includes>
+                <include>*.json</include>
+            </includes>
+        </fileSet>
+        <fileSet> <!-- Readable -->
+            <directory>../resources/GenshinData/Readable/</directory>
+            <outputDirectory>/resources/GenshinData/Readable/</outputDirectory>
+            <includes>
+                <include>**/*.txt</include>
+            </includes>
+        </fileSet>
+        <fileSet> <!-- Main Jar -->
+            <directory>../genshindataviewer-web/target/</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>genshindataviewer.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet> <!-- application.properties -->
+            <directory>../genshindataviewer-web/src/main/resources/</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>application.properties</include>
+            </includes>
+        </fileSet>
+        <fileSet> <!-- COPY -->
+            <directory>src/copy/</directory>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

@@ -35,7 +35,7 @@ public class BaseDataController {
 
     @RequestMapping("/text")
     @ResponseBody
-    public ResultVO getText(Byte lang, Long id){
+    public ResultVO<String> getText(Byte lang, Long id){
         ResultDO<String> result = baseDataService.getTextByLangId(lang, id);
         if(result.isSuccess()){
             return ResultVO.buildSuccessResult(result.getResult());
@@ -45,7 +45,7 @@ public class BaseDataController {
 
     @RequestMapping("/allEnum")
     @ResponseBody
-    public ResultVO allEnum(){
+    public ResultVO<Map<String, Map<Byte, String>>> allEnum(){
         ResultDO<Map<String, Map<Byte, String>>> result = baseDataService.getValueDescOfAllEnums();
         if(result.isSuccess()){
             return ResultVO.buildSuccessResult(result.getResult());
@@ -55,7 +55,7 @@ public class BaseDataController {
 
     @RequestMapping("refresh")
     @ResponseBody
-    public ResultVO refresh(String pass){
+    public ResultVO<Map<String, List<String>>> refresh(String pass){
         String error = null;
         Map<String, List<String>> ret = null;
         try{
