@@ -4,13 +4,18 @@ import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import space.xiami.project.genshincommon.enums.CurveEnum;
+import space.xiami.project.genshincommon.enums.ElementalTypeEnum;
+import space.xiami.project.genshincommon.enums.LanguageEnum;
 import space.xiami.project.genshindataviewer.domain.json.*;
 import space.xiami.project.genshindataviewer.domain.model.*;
 import space.xiami.project.genshindataviewer.service.factory.AvatarFactory;
 import space.xiami.project.genshindataviewer.service.factory.CurveFactory;
+import space.xiami.project.genshindataviewer.service.factory.TeamResonanceFactory;
 import space.xiami.project.genshindataviewer.service.factory.TextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.ManualTextMapFactory;
 import space.xiami.project.genshindataviewer.service.factory.single.MaterialFactory;
@@ -30,6 +35,11 @@ import java.util.stream.Collectors;
 public class AvatarManager {
 
     public static final Logger log = LoggerFactory.getLogger(AvatarManager.class);
+
+    private static final Map<String, Byte> elementString2Enum = new HashMap<>();
+
+    // 元素对应可能的效果
+    private Map<Byte, List<Long>> element2teamResonance = null;
 
     @Resource
     private AvatarFactory avatarFactory;
@@ -52,6 +62,50 @@ public class AvatarManager {
     @Resource
     private CurveFactory curveFactory;
 
+    @Resource
+    private TeamResonanceFactory teamResonanceFactory;
+
+    static {
+        elementString2Enum.put("Fire", ElementalTypeEnum.PYRO.getCode());
+        elementString2Enum.put("Water", ElementalTypeEnum.HYDRO.getCode());
+        elementString2Enum.put("Grass", ElementalTypeEnum.DENDRO.getCode());
+        elementString2Enum.put("Electric", ElementalTypeEnum.ELECTRO.getCode());
+        elementString2Enum.put("Wind", ElementalTypeEnum.ANEMO.getCode());
+        elementString2Enum.put("Ice", ElementalTypeEnum.CRYO.getCode());
+        elementString2Enum.put("Rock", ElementalTypeEnum.GEO.getCode());
+    }
+
+    private void initElementToTeamResonance(){
+        element2teamResonance = new HashMap<>();
+        teamResonanceFactory.getTeamResonanceList().forEach(excelConfigData -> {
+            Long id = excelConfigData.getTeamResonanceId();
+            if(excelConfigData.getCond() != null){
+                element2teamResonance.computeIfAbsent((byte) -1, v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getFireAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.PYRO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getWaterAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.HYDRO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getGrassAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.DENDRO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getElectricAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.ELECTRO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getWindAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.ANEMO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getIceAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.CRYO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+            if(excelConfigData.getRockAvatarCount() != null){
+                element2teamResonance.computeIfAbsent(ElementalTypeEnum.GEO.getCode(), v -> new ArrayList<>()).add(id);
+            }
+        });
+    }
+
     public Map<String, Long> getAvatarIds(Byte language){
         return avatarFactory.getName2Ids(language);
     }
@@ -60,11 +114,11 @@ public class AvatarManager {
         return avatarFactory.getIdByName(lang, name);
     }
 
-    public Avatar getAvatar(Byte lang, String name){
-        return getAvatar(lang, getAvatarId(lang, name));
+    public Avatar getAvatar(Byte lang, String name, Byte elementalType){
+        return getAvatar(lang, getAvatarId(lang, name), elementalType);
     }
 
-    public Avatar getAvatar(Byte lang, Long id){
+    public Avatar getAvatar(Byte lang, Long id, Byte elementalType){
         if(lang == null || id == null){
             return null;
         }
@@ -72,10 +126,135 @@ public class AvatarManager {
         if(excelConfigData == null){
             return null;
         }
-        return convert(lang, excelConfigData);
+        return convert(lang, excelConfigData, elementalType);
     }
 
-    private Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData){
+    public TeamResonance getTeamResonance(Byte lang, Long id) {
+        if(lang == null || id == null){
+            return null;
+        }
+        TeamResonanceExcelConfigData excelConfigData = teamResonanceFactory.getByTeamResonanceId(id);
+        if(excelConfigData == null){
+            return null;
+        }
+        return convertTeamResonance(lang, excelConfigData);
+    }
+
+    /**
+     * @see ElementalTypeEnum
+     * @param lang 语言
+     * @param ids id列表
+     * @param appointElementalTypes 指定的元素类型 null 表示不指定
+     * @return 效果组
+     */
+    public TeamResonanceGroup getTeamResonanceGroup(Byte lang, List<Long> ids, List<Byte> appointElementalTypes){
+        if(CollectionUtils.isEmpty(ids) || CollectionUtils.isEmpty(appointElementalTypes) || ids.size() != appointElementalTypes.size()){
+            return null;
+        }
+        Map<Byte, Integer> elementAvatarCount = new HashMap<>();
+        for(int idx=0; idx<ids.size();idx++){
+            Byte elementalType = appointElementalTypes.get(idx);
+            if(elementalType == null){
+                // skillDepot -> activeSkill -> costElemType
+                AvatarExcelConfigData excelConfigData = avatarFactory.getAvatar(ids.get(idx));
+                Set<Long> skillDepotIdSet = new ListOrderedSet<>();
+                skillDepotIdSet.add(excelConfigData.getSkillDepotId());
+                skillDepotIdSet.addAll(excelConfigData.getCandSkillDepotIds());
+                skillDepotIdSet.forEach(skillDepotId -> {
+                    AvatarSkillDepotExcelConfigData skillDepot = avatarFactory.getAvatarSkillDepot(skillDepotId);
+                    List<Long> activeSkillIds = new ArrayList<>(skillDepot.getSkills());
+                    activeSkillIds.add(skillDepot.getEnergySkill());
+                    activeSkillIds.forEach(skillId -> {
+                        AvatarSkillExcelConfigData skill = avatarFactory.getAvatarSkill(skillId);
+                        if(skill != null && skill.getCostElemType() != null){
+                            Byte elemCode = elementString2Enum.get(skill.getCostElemType());
+                            elementAvatarCount.put(elemCode, elementAvatarCount.getOrDefault(elemCode, 0) + 1);
+                        }
+                    });
+                });
+            }else{
+                elementAvatarCount.put(elementalType, elementAvatarCount.getOrDefault(elementalType, 0) + 1);
+            }
+        }
+        if(element2teamResonance == null){
+            initElementToTeamResonance();
+        }
+        List<TeamResonanceExcelConfigData> trs = teamResonanceFactory.getTeamResonanceList();
+        TeamResonanceGroup teamResonanceGroup = new TeamResonanceGroup();
+        teamResonanceGroup.setTeamResonances(new ArrayList<>());
+        trs.forEach(tr -> {
+            TeamResonance teamResonance = getTeamResonance(lang, tr.getTeamResonanceId());
+            if(isMatchTeamResonance(teamResonance, elementAvatarCount)){
+                teamResonanceGroup.getTeamResonances().add(teamResonance);
+            }
+        });
+        return teamResonanceGroup;
+    }
+
+    private boolean isMatchTeamResonance(TeamResonance teamResonance, Map<Byte, Integer> elemAvatarCount){
+        if(teamResonance.getAllDifferent() != null && teamResonance.getAllDifferent()){
+            for(Map.Entry<Byte, Integer> entry : elemAvatarCount.entrySet()){
+                if(entry.getValue() > 1){
+                    return false;
+                }
+            }
+        }
+        if(teamResonance.getElementAvatarLimit() != null){
+            for(Map.Entry<Byte, Integer> limit : teamResonance.getElementAvatarLimit().entrySet()){
+                if(!elemAvatarCount.containsKey(limit.getKey()) || elemAvatarCount.get(limit.getKey()) < limit.getValue()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private TeamResonance convertTeamResonance(Byte lang, TeamResonanceExcelConfigData from){
+        TeamResonance to = new TeamResonance();
+        to.setTeamResonanceId(from.getTeamResonanceId());
+        to.setTeamResonanceGroupId(from.getTeamResonanceGroupId());
+        to.setLevel(from.getLevel());
+        if(from.getCond() != null){
+            to.setAllDifferent(true);
+        }else{
+            Map<Byte, Integer> limit = new HashMap<>();
+            if(from.getFireAvatarCount() != null){
+                limit.put(ElementalTypeEnum.PYRO.getCode(), from.getFireAvatarCount());
+            }
+            if(from.getWaterAvatarCount() != null){
+                limit.put(ElementalTypeEnum.HYDRO.getCode(), from.getWaterAvatarCount());
+            }
+            if(from.getGrassAvatarCount() != null){
+                limit.put(ElementalTypeEnum.DENDRO.getCode(), from.getGrassAvatarCount());
+            }
+            if(from.getElectricAvatarCount() != null){
+                limit.put(ElementalTypeEnum.ELECTRO.getCode(), from.getElectricAvatarCount());
+            }
+            if(from.getWindAvatarCount() != null){
+                limit.put(ElementalTypeEnum.ANEMO.getCode(), from.getWindAvatarCount());
+            }
+            if(from.getIceAvatarCount() != null){
+                limit.put(ElementalTypeEnum.CRYO.getCode(), from.getIceAvatarCount());
+            }
+            if(from.getRockAvatarCount() != null){
+                limit.put(ElementalTypeEnum.GEO.getCode(), from.getRockAvatarCount());
+            }
+            to.setElementAvatarLimit(limit);
+        }
+        to.setName(textMapFactory.getText(lang, from.getNameTextMapHash()));
+        to.setDesc(textMapFactory.getText(lang, from.getDescTextMapHash()));
+        to.setOpenConfig(from.getOpenConfig());
+        to.setAddProperties(from.getAddProps().stream().map(addProp -> {
+            AddProperty addProperty = new AddProperty();
+            addProperty.setPropType(manualTextMapFactory.getText(lang, addProp.getPropType()));
+            addProperty.setValue(addProp.getValue());
+            return addProperty;
+        }).collect(Collectors.toList()));
+        to.setParamList(from.getParamList());
+        return to;
+    }
+
+    private Avatar convert(Byte lang, AvatarExcelConfigData excelConfigData, Byte elementalType){
         Avatar avatar = new Avatar();
         avatar.setId(excelConfigData.getId());
         avatar.setName(textMapFactory.getText(lang, excelConfigData.getNameTextMapHash()));
@@ -173,6 +352,9 @@ public class AvatarManager {
         Map<Long, List<Avatar.Talent>> talents = new HashMap<>();
         skillDepotIdSet.forEach(skillDepotId -> {
             AvatarSkillDepotExcelConfigData skillDepot = avatarFactory.getAvatarSkillDepot(skillDepotId);
+            if(elementalType != null && !isMatchSkillDepotElementType(skillDepot, elementalType)){
+                return;
+            }
             List<Avatar.ActiveSkill> skillsActive = new ArrayList<>();
             List<Avatar.PassiveSkill> skillsPassive = new ArrayList<>();
             List<Avatar.Talent> talentList = new ArrayList<>();
@@ -254,6 +436,21 @@ public class AvatarManager {
         return avatar;
     }
 
+    private boolean isMatchSkillDepotElementType(AvatarSkillDepotExcelConfigData skillDepot, Byte elementalType){
+        List<Long> activeSkillIds = new ArrayList<>(skillDepot.getSkills());
+        activeSkillIds.add(skillDepot.getEnergySkill());
+        for(Long skillId : activeSkillIds){
+            AvatarSkillExcelConfigData skill = avatarFactory.getAvatarSkill(skillId);
+            if(skill != null && skill.getCostElemType() != null){
+                Byte elemCode = elementString2Enum.get(skill.getCostElemType());
+                if(elemCode.equals(elementalType)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private Avatar.ActiveSkill convertActiveSkill(Byte lang, AvatarSkillExcelConfigData activeSkill){
         if(activeSkill == null){
             return null;
@@ -263,7 +460,7 @@ public class AvatarManager {
         avatarActiveSkill.setName(textMapFactory.getText(lang, activeSkill.getNameTextMapHash()));
         avatarActiveSkill.setDesc(textMapFactory.getText(lang, activeSkill.getDescTextMapHash()));
         avatarActiveSkill.setCdTime(activeSkill.getCdTime());
-        avatarActiveSkill.setCostElemType(activeSkill.getCostElemType());
+        avatarActiveSkill.setCostElemType(manualTextMapFactory.getText(lang, activeSkill.getCostElemType()));
         avatarActiveSkill.setCostElemVal(activeSkill.getCostElemVal());
         avatarActiveSkill.setCostStamina(activeSkill.getCostStamina());
         avatarActiveSkill.setMaxChargeNum(activeSkill.getMaxChargeNum());
